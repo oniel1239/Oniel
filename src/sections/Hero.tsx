@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Points, PointMaterial, Sphere, MeshDistortMaterial, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
@@ -135,6 +135,7 @@ export default function Hero() {
   const role1Ref = useRef<HTMLSpanElement>(null);
   const role2Ref = useRef<HTMLSpanElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrolledPast, setScrolledPast] = useState(false);
 
   useEffect(() => {
     // Initial reveal animation
@@ -174,7 +175,7 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
-  // Scroll fade and blur effect
+  // Scroll fade, blur, and direction changes
   useEffect(() => {
     const textEl = textRef.current;
     const scrollEl = scrollRef.current;
@@ -182,10 +183,16 @@ export default function Hero() {
 
     const onScroll = () => {
       const scrollY = window.scrollY;
-      const progress = Math.min(scrollY / window.innerHeight, 1);
+      const heroHeight = window.innerHeight;
+      const progress = Math.min(scrollY / heroHeight, 1);
+      
+      // Hero text fade/blur
       textEl.style.opacity = String(1 - progress * 1.5);
       textEl.style.transform = `translateY(${progress * 150}px)`;
       textEl.style.filter = `blur(${progress * 15}px)`;
+      
+      // Scroll indicator fade and direction
+      setScrolledPast(scrollY > heroHeight * 0.5);
       
       if (scrollEl) {
         scrollEl.style.opacity = String(1 - progress * 2);
@@ -250,17 +257,19 @@ export default function Hero() {
           <div className="w-12 h-[1px] bg-accent"></div>
         </div>
 
-        {/* Scroll-down indicator */}
+        {/* Scroll indicator — flips direction when scrolled past hero */}
         <div
           ref={scrollRef}
           onClick={() => {
-            const el = document.querySelector('#about');
+            const target = scrolledPast ? '#home' : '#about';
+            const el = document.querySelector(target);
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
-              const el = document.querySelector('#about');
+              const target = scrolledPast ? '#home' : '#about';
+              const el = document.querySelector(target);
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }
           }}
@@ -270,19 +279,32 @@ export default function Hero() {
         >
           {/* Pill container */}
           <div className="flex flex-col items-center gap-2 px-4 py-3 rounded-full border border-[rgba(158,255,0,0.15)] bg-[rgba(3,7,18,0.5)] backdrop-blur-sm transition-all duration-300 group-hover:border-[rgba(158,255,0,0.4)] group-hover:bg-[rgba(158,255,0,0.05)]">
-            {/* Text */}
-            <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-[rgba(158,255,0,0.5)] group-hover:text-[rgba(158,255,0,0.8)] transition-colors duration-300">
-              Scroll
+            {/* Text — changes between Scroll and Top */}
+            <span className="text-[9px] font-mono tracking-[0.25em] uppercase transition-all duration-500"
+              style={{
+                color: scrolledPast
+                  ? 'rgba(0,255,204,0.6)'
+                  : 'rgba(158,255,0,0.5)',
+              }}
+            >
+              {scrolledPast ? 'Top' : 'Scroll'}
             </span>
-            {/* Animated arrows */}
-            <div className="flex flex-col items-center -mt-0.5">
+            {/* Animated arrows — flip 180° when scrolled past */}
+            <div className={`flex flex-col items-center -mt-0.5 transition-transform duration-500 ${
+              scrolledPast ? 'rotate-180' : 'rotate-0'
+            }`}>
               <svg
                 width="14"
                 height="14"
                 viewBox="0 0 14 14"
                 fill="none"
-                className="text-[rgba(158,255,0,0.4)] group-hover:text-[rgba(158,255,0,0.7)] transition-colors duration-300 animate-bounce"
-                style={{ animationDuration: '2s' }}
+                className="transition-colors duration-300 animate-bounce"
+                style={{
+                  color: scrolledPast
+                    ? 'rgba(0,255,204,0.4)'
+                    : 'rgba(158,255,0,0.4)',
+                  animationDuration: '2s',
+                }}
               >
                 <path
                   d="M7 10L2 5M7 10L12 5"
@@ -297,8 +319,14 @@ export default function Hero() {
                 height="14"
                 viewBox="0 0 14 14"
                 fill="none"
-                className="text-[rgba(158,255,0,0.4)] group-hover:text-[rgba(158,255,0,0.7)] transition-colors duration-300 -mt-3 animate-bounce"
-                style={{ animationDuration: '2s', animationDelay: '0.15s' }}
+                className="transition-colors duration-300 -mt-3 animate-bounce"
+                style={{
+                  color: scrolledPast
+                    ? 'rgba(0,255,204,0.4)'
+                    : 'rgba(158,255,0,0.4)',
+                  animationDuration: '2s',
+                  animationDelay: '0.15s',
+                }}
               >
                 <path
                   d="M7 10L2 5M7 10L12 5"
@@ -310,8 +338,12 @@ export default function Hero() {
               </svg>
             </div>
           </div>
-          {/* Glow dot at very bottom */}
-          <div className="w-[2px] h-6 bg-gradient-to-b from-[rgba(158,255,0,0.3)] to-transparent" />
+          {/* Glow line — flips gradient direction when scrolled past */}
+          <div className={`w-[2px] h-6 transition-all duration-500 ${
+            scrolledPast
+              ? 'bg-gradient-to-t from-[rgba(0,255,204,0.3)] to-transparent'
+              : 'bg-gradient-to-b from-[rgba(158,255,0,0.3)] to-transparent'
+          }`} />
         </div>
       </div>
     </section>
