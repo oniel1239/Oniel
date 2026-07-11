@@ -248,7 +248,7 @@ export default function Portfolio() {
           scrollTrigger: {
             trigger: header,
             start: 'top 75%',
-            toggleActions: 'play none none none',
+            toggleActions: 'play none none reverse',
           },
         }
       );

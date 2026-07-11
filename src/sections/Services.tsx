@@ -72,7 +72,7 @@ export default function Services() {
             scrollTrigger: {
               trigger: headerRef.current,
               start: 'top 75%',
-              toggleActions: 'play none none none',
+              toggleActions: 'play none none reverse',
             },
           }
         );
@@ -94,7 +94,7 @@ export default function Services() {
             scrollTrigger: {
               trigger: card,
               start: 'top 75%',
-              toggleActions: 'play none none none',
+              toggleActions: 'play none none reverse',
             },
           }
         );

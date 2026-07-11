@@ -39,7 +39,7 @@ export default function About() {
           scrollTrigger: {
             trigger: section,
             start: 'top 70%',
-            toggleActions: 'play none none none',
+            toggleActions: 'play none none reverse',
           },
         }
       );
@@ -58,7 +58,7 @@ export default function About() {
           scrollTrigger: {
             trigger: section,
             start: 'top 60%',
-            toggleActions: 'play none none none',
+            toggleActions: 'play none none reverse',
           },
         }
       );
@@ -78,7 +78,7 @@ export default function About() {
             scrollTrigger: {
               trigger: skillEl,
               start: 'top 85%',
-              toggleActions: 'play none none none',
+              toggleActions: 'play none none reverse',
             },
           }
         );
