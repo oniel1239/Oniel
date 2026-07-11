@@ -69,7 +69,7 @@ export default function Contact() {
       `Name: ${name}\nEmail: ${email}\nService: ${service}\n\nMessage:\n${message}`
     );
 
-    window.location.href = `mailto:oliverkcw199@gmail.com?subject=${subject}&body=${body}`;
+    window.open(`mailto:oliverkcw199@gmail.com?subject=${subject}&body=${body}`, '_blank');
   };
 
   return (
