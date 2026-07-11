@@ -11,8 +11,22 @@ const sections = [
 export default function SectionProgress() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [flashIndex, setFlashIndex] = useState<number | null>(null);
   const [visible, setVisible] = useState(true);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Flash the section label for 2 seconds when active section changes
+  useEffect(() => {
+    setFlashIndex(activeIndex);
+    if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    flashTimerRef.current = setTimeout(() => {
+      setFlashIndex(null);
+    }, 2000);
+    return () => {
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    };
+  }, [activeIndex]);
 
   useEffect(() => {
     const sectionElements = sections
@@ -101,7 +115,7 @@ export default function SectionProgress() {
             {/* Tooltip label */}
             <span
               className={`absolute right-full mr-3 px-2.5 py-1 text-[10px] font-mono tracking-wider uppercase whitespace-nowrap transition-all duration-300 ${
-                isHovered || isActive
+                isHovered || i === flashIndex
                   ? 'opacity-100 translate-x-0'
                   : 'opacity-0 translate-x-2 pointer-events-none'
               }`}
