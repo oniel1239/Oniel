@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { asset } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +13,7 @@ const services = [
     description:
       'Comprehensive security audits, vulnerability assessments, and penetration testing. I identify weaknesses before malicious actors do — providing detailed remediation strategies and fortifying your digital infrastructure against evolving cyber threats.',
     features: ['Network Penetration Testing', 'Web App Security Audits', 'Social Engineering Assessments', 'Red Team Operations', 'Security Reporting & Remediation'],
-    image: '/portfolio-1.jpg',
+    image: asset('/portfolio-1.jpg'),
     accent: '#9eff00',
   },
   {
@@ -22,7 +23,7 @@ const services = [
     description:
       'Custom automation pipelines that eliminate repetitive tasks, streamline operations, and boost productivity. From bot development to CI/CD orchestration, I engineer intelligent workflows that let your team focus on what matters most.',
     features: ['Custom Bot Development', 'CI/CD Pipeline Design', 'Data Processing Automation', 'API Integration & Orchestration', 'Monitoring & Alerting Systems'],
-    image: '/portfolio-2.jpg',
+    image: asset('/portfolio-2.jpg'),
     accent: '#00ffcc',
   },
   {
@@ -32,7 +33,7 @@ const services = [
     description:
       'Modern, blazing-fast web applications built with security-first architecture. I specialize in React ecosystems, server-side rendering, and progressive web apps that deliver exceptional user experiences while maintaining ironclad security standards.',
     features: ['React & Next.js Development', 'Secure Authentication Systems', 'Performance Optimization', 'Responsive & Accessible Design', 'SEO-First Architecture'],
-    image: '/portfolio-3.jpg',
+    image: asset('/portfolio-3.jpg'),
     accent: '#9eff00',
   },
   {
@@ -42,7 +43,7 @@ const services = [
     description:
       'Robust, scalable backend architectures and RESTful/GraphQL APIs. I design database schemas, implement microservices, and build the infrastructure that powers modern applications — all with security, performance, and maintainability at the core.',
     features: ['API Design & Development', 'Database Architecture', 'Microservices Implementation', 'Cloud Infrastructure Setup', 'Real-time Data Processing'],
-    image: '/portfolio-4.jpg',
+    image: asset('/portfolio-4.jpg'),
     accent: '#00ffcc',
   },
 ];

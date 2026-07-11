@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { asset } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,7 @@ const projects = [
     title: 'SecureNet PenTest Suite',
     category: 'Ethical Hacking',
     description: 'Automated penetration testing framework with real-time vulnerability scanning and comprehensive reporting.',
-    image: '/portfolio-1.jpg',
+    image: asset('/portfolio-1.jpg'),
     tags: ['Python', 'Metasploit', 'Nmap', 'Docker'],
   },
   {
@@ -19,7 +20,7 @@ const projects = [
     title: 'AutoFlow Enterprise',
     category: 'Workflow Automation',
     description: 'End-to-end business process automation platform handling 10,000+ daily operations with zero downtime.',
-    image: '/portfolio-2.jpg',
+    image: asset('/portfolio-2.jpg'),
     tags: ['Node.js', 'Redis', 'Kubernetes', 'GraphQL'],
   },
   {
@@ -27,7 +28,7 @@ const projects = [
     title: 'CipherVault Dashboard',
     category: 'Web Development',
     description: 'Real-time cybersecurity monitoring dashboard with threat visualization and instant alert systems.',
-    image: '/portfolio-5.jpg',
+    image: asset('/portfolio-5.jpg'),
     tags: ['React', 'D3.js', 'WebSocket', 'TypeScript'],
   },
   {
@@ -35,7 +36,7 @@ const projects = [
     title: 'NeuralSync API',
     category: 'App Development',
     description: 'High-performance microservices architecture processing 50M+ requests daily with sub-10ms latency.',
-    image: '/portfolio-4.jpg',
+    image: asset('/portfolio-4.jpg'),
     tags: ['Go', 'gRPC', 'PostgreSQL', 'AWS'],
   },
   {
@@ -43,7 +44,7 @@ const projects = [
     title: 'PhishGuard AI',
     category: 'Ethical Hacking',
     description: 'AI-powered phishing detection system with 99.7% accuracy in identifying social engineering attempts.',
-    image: '/portfolio-6.jpg',
+    image: asset('/portfolio-6.jpg'),
     tags: ['Python', 'TensorFlow', 'NLP', 'ElasticSearch'],
   },
   {
@@ -51,7 +52,7 @@ const projects = [
     title: 'DevOps Pipeline Pro',
     category: 'Workflow Automation',
     description: 'Complete CI/CD automation suite reducing deployment time by 85% while maintaining 100% security compliance.',
-    image: '/portfolio-3.jpg',
+    image: asset('/portfolio-3.jpg'),
     tags: ['Jenkins', 'Terraform', 'Ansible', 'Prometheus'],
   },
 ];

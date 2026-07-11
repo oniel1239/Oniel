@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { asset } from '@/lib/utils';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -112,7 +113,7 @@ export default function About() {
           <div ref={imageRef} className="relative">
             <div className="relative aspect-[3/4] max-w-md mx-auto lg:mx-0 overflow-hidden border-2 border-[var(--accent)]">
               <img
-                src="/profile.jpg"
+                src={asset('/profile.jpg')}
                 alt="Portrait of Oniel Robin Samuel, Systems Architect"
                 loading="lazy"
                 className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
