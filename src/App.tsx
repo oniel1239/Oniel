@@ -45,7 +45,7 @@ function App() {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative overflow-x-hidden">
       <CustomCursor />
       <NoiseOverlay />
       <Navigation />
