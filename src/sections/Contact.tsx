@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Mail, Phone, MapPin, Github, Instagram, Linkedin } from 'lucide-react';
@@ -9,8 +9,6 @@ export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [formState, setFormState] = useState<'idle' | 'submitting' | 'success'>('idle');
-
   useEffect(() => {
     const section = sectionRef.current;
     const header = headerRef.current;
@@ -59,13 +57,19 @@ export default function Contact() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setFormState('submitting');
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const service = formData.get('service') as string;
+    const message = formData.get('message') as string;
 
-    // Simulate submission
-    setTimeout(() => {
-      setFormState('success');
-      setTimeout(() => setFormState('idle'), 3000);
-    }, 1500);
+    const subject = encodeURIComponent(`Project Inquiry: ${service}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\nEmail: ${email}\nService: ${service}\n\nMessage:\n${message}`
+    );
+
+    window.location.href = `mailto:oliverkcw199@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -263,34 +267,10 @@ export default function Contact() {
             <div className="form-field pt-4">
               <button
                 type="submit"
-                disabled={formState !== 'idle'}
-                className={`relative w-full py-4 font-display font-bold text-sm tracking-[0.2em] uppercase transition-all duration-500 overflow-hidden ${
-                  formState === 'success'
-                    ? 'bg-[var(--accent)] text-[var(--bg-primary)]'
-                    : 'border border-[var(--accent)] text-[var(--accent)] hover:bg-[var(--accent)] hover:text-[var(--bg-primary)]'
-                }`}
+                className="group relative w-full py-4 font-display font-bold text-sm tracking-[0.2em] uppercase overflow-hidden border border-[var(--accent)] text-[var(--accent)] transition-all duration-500 hover:bg-[var(--accent)] hover:text-[var(--bg-primary)]"
               >
-                <span
-                  className={`transition-all duration-300 ${
-                    formState === 'idle' ? 'opacity-100' : 'opacity-0'
-                  }`}
-                >
-                  INITIALIZE CONTACT
-                </span>
-                <span
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                    formState === 'submitting' ? 'opacity-100' : 'opacity-0'
-                  }`}
-                >
-                  TRANSMITTING...
-                </span>
-                <span
-                  className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
-                    formState === 'success' ? 'opacity-100' : 'opacity-0'
-                  }`}
-                >
-                  SIGNAL RECEIVED
-                </span>
+                <span className="relative z-10">CONTACT ME</span>
+                <div className="absolute inset-0 bg-[var(--accent)] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
               </button>
             </div>
           </form>

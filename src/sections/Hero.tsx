@@ -238,20 +238,7 @@ export default function Hero() {
           <div className="w-12 h-[1px] bg-accent"></div>
         </div>
 
-        {/* Call to Action */}
-        <div className="mt-12 pointer-events-auto">
-          <a
-            href="#portfolio"
-            onClick={(e) => {
-              e.preventDefault();
-              document.querySelector('#portfolio')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="group relative inline-flex items-center justify-center px-8 py-4 font-display font-bold text-sm tracking-[0.2em] uppercase overflow-hidden border border-[var(--accent)] text-[var(--accent)] transition-all duration-500 hover:bg-[var(--accent)] hover:text-[var(--bg-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-primary)]"
-          >
-            <span className="relative z-10">Explore My Work</span>
-            <div className="absolute inset-0 bg-[var(--accent)] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
-          </a>
-        </div>
+
       </div>
     </section>
   );
