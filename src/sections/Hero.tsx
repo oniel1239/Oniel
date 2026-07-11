@@ -134,6 +134,7 @@ export default function Hero() {
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const role1Ref = useRef<HTMLSpanElement>(null);
   const role2Ref = useRef<HTMLSpanElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Initial reveal animation
@@ -153,6 +154,11 @@ export default function Hero() {
         { opacity: 0, scale: 0.8 },
         { opacity: 1, scale: 1, duration: 0.8, stagger: 0.2, ease: 'back.out(1.5)' },
         "-=0.5"
+      )
+      .fromTo(scrollRef.current,
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
+        "-=0.3"
       );
       
       // Glitch effect loop
@@ -171,14 +177,20 @@ export default function Hero() {
   // Scroll fade and blur effect
   useEffect(() => {
     const textEl = textRef.current;
+    const scrollEl = scrollRef.current;
     if (!textEl) return;
 
     const onScroll = () => {
       const scrollY = window.scrollY;
       const progress = Math.min(scrollY / window.innerHeight, 1);
-      textEl.style.opacity = String(1 - progress * 1.5); // Fades out faster
+      textEl.style.opacity = String(1 - progress * 1.5);
       textEl.style.transform = `translateY(${progress * 150}px)`;
       textEl.style.filter = `blur(${progress * 15}px)`;
+      
+      if (scrollEl) {
+        scrollEl.style.opacity = String(1 - progress * 2);
+        scrollEl.style.transform = `translateY(${progress * 30}px)`;
+      }
     };
     
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -238,7 +250,69 @@ export default function Hero() {
           <div className="w-12 h-[1px] bg-accent"></div>
         </div>
 
-
+        {/* Scroll-down indicator */}
+        <div
+          ref={scrollRef}
+          onClick={() => {
+            const el = document.querySelector('#about');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              const el = document.querySelector('#about');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer pointer-events-auto group"
+        >
+          {/* Pill container */}
+          <div className="flex flex-col items-center gap-2 px-4 py-3 rounded-full border border-[rgba(158,255,0,0.15)] bg-[rgba(3,7,18,0.5)] backdrop-blur-sm transition-all duration-300 group-hover:border-[rgba(158,255,0,0.4)] group-hover:bg-[rgba(158,255,0,0.05)]">
+            {/* Text */}
+            <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-[rgba(158,255,0,0.5)] group-hover:text-[rgba(158,255,0,0.8)] transition-colors duration-300">
+              Scroll
+            </span>
+            {/* Animated arrows */}
+            <div className="flex flex-col items-center -mt-0.5">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                className="text-[rgba(158,255,0,0.4)] group-hover:text-[rgba(158,255,0,0.7)] transition-colors duration-300 animate-bounce"
+                style={{ animationDuration: '2s' }}
+              >
+                <path
+                  d="M7 10L2 5M7 10L12 5"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+                fill="none"
+                className="text-[rgba(158,255,0,0.4)] group-hover:text-[rgba(158,255,0,0.7)] transition-colors duration-300 -mt-3 animate-bounce"
+                style={{ animationDuration: '2s', animationDelay: '0.15s' }}
+              >
+                <path
+                  d="M7 10L2 5M7 10L12 5"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+          {/* Glow dot at very bottom */}
+          <div className="w-[2px] h-6 bg-gradient-to-b from-[rgba(158,255,0,0.3)] to-transparent" />
+        </div>
       </div>
     </section>
   );
