@@ -178,20 +178,7 @@ export default function Navigation() {
                 >
                   {item.label}
                 </span>
-                <span
-                  className={`block text-[11px] font-mono tracking-wider uppercase transition-all duration-500 ease-out mt-1 ${
-                    mobileOpen
-                      ? 'translate-x-0 opacity-100'
-                      : 'translate-x-4 opacity-0'
-                  }`}
-                  style={{
-                    transitionDelay: mobileOpen ? `${i * 60 + 150}ms` : '0ms',
-                    color: 'var(--text-secondary)',
-                    opacity: mobileOpen ? 0.4 : 0,
-                  }}
-                >
-                  {['00', '01', '02', '03', '04'][i]}
-                </span>
+
                 {/* Hover accent */}
                 <span
                   className={`absolute left-0 top-0 w-[2px] h-full bg-[var(--accent)] transition-all duration-300 ${

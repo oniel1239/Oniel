@@ -267,10 +267,28 @@ export default function Contact() {
             <div className="form-field pt-4">
               <button
                 type="submit"
-                className="group relative w-full py-4 font-display font-bold text-sm tracking-[0.2em] uppercase overflow-hidden border border-[var(--accent)] text-[var(--accent)] transition-all duration-500 hover:bg-[var(--accent)] hover:text-[var(--bg-primary)]"
+                className="group relative w-full py-4 font-display font-bold text-sm tracking-[0.2em] uppercase overflow-hidden border border-white/20 text-white/80 transition-all duration-300"
+                style={{
+                  background: 'rgba(255,255,255,0.04)',
+                }}
               >
-                <span className="relative z-10">CONTACT ME</span>
-                <div className="absolute inset-0 bg-[var(--accent)] transform scale-x-0 origin-left transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                {/* Hover fill - white */}
+                <div className="absolute inset-0 bg-white transform scale-x-0 origin-left transition-transform duration-300 ease-out group-hover:scale-x-100" />
+
+                {/* Default text */}
+                <span className="relative z-10 block text-white/80 transition-all duration-300 group-hover:opacity-0 group-hover:-translate-y-2">
+                  CONTACT ME
+                </span>
+
+                {/* Hover text */}
+                <span className="absolute inset-0 z-10 flex items-center justify-center text-[var(--bg-primary)] transition-all duration-300 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                  <span className="flex items-center gap-2">
+                    Go! Click
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="transition-transform duration-300 group-hover:translate-x-1">
+                      <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                </span>
               </button>
             </div>
           </form>
