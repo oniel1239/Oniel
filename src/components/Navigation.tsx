@@ -85,28 +85,69 @@ export default function Navigation() {
             ))}
           </ul>
 
-          {/* Mobile hamburger */}
+          {/* Mobile hamburger — modernized */}
           <button
-            className="md:hidden relative z-[1001] flex items-center justify-center w-11 h-11 border border-[rgba(158,255,0,0.5)] hover:border-[var(--accent)] bg-[rgba(158,255,0,0.12)] hover:bg-[rgba(158,255,0,0.2)] active:bg-[rgba(158,255,0,0.3)] transition-all duration-200 rounded-[4px]"
+            className="md:hidden relative z-[1001] flex items-center justify-center w-12 h-12 rounded-full border border-[rgba(158,255,0,0.2)] hover:border-[rgba(158,255,0,0.6)] bg-[rgba(158,255,0,0.06)] hover:bg-[rgba(158,255,0,0.12)] active:scale-95 transition-all duration-300 group"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            <div className="flex flex-col items-center justify-center gap-[4px]">
+            {/* Glow ring */}
+            <div
+              className={`absolute inset-0 rounded-full transition-all duration-500 ${
+                mobileOpen
+                  ? 'opacity-100 scale-110'
+                  : 'opacity-0 scale-90'
+              }`}
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(158,255,0,0.15) 0%, transparent 70%)',
+              }}
+            />
+
+            {/* Bars container */}
+            <div className="relative flex flex-col items-center justify-center gap-[5px]">
+              {/* Top bar — morphs to top of X */}
               <span
-                className={`block w-[18px] h-[2px] bg-[var(--accent)] rounded-full transition-all duration-300 ease-out ${
-                  mobileOpen ? 'rotate-45 translate-y-[6px]' : ''
+                className={`block rounded-full transition-all duration-500 ease-out origin-center ${
+                  mobileOpen
+                    ? 'rotate-45 translate-y-[7px] w-[20px] h-[2px]'
+                    : 'rotate-0 translate-y-0 w-[18px] h-[1.5px]'
                 }`}
+                style={{
+                  background:
+                    'linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 100%)',
+                  boxShadow: mobileOpen
+                    ? '0 0 8px rgba(158,255,0,0.4)'
+                    : 'none',
+                }}
               />
+
+              {/* Middle bar — scales out */}
               <span
-                className={`block w-[18px] h-[2px] bg-[var(--accent)] rounded-full transition-all duration-300 ease-out ${
-                  mobileOpen ? 'opacity-0 scale-x-0' : ''
+                className={`block h-[1.5px] rounded-full transition-all duration-300 ease-out ${
+                  mobileOpen ? 'opacity-0 scale-x-0 w-[18px]' : 'opacity-100 scale-x-100 w-[14px]'
                 }`}
+                style={{
+                  background:
+                    'linear-gradient(90deg, rgba(158,255,0,0.6), rgba(0,255,204,0.4))',
+                }}
               />
+
+              {/* Bottom bar — morphs to bottom of X */}
               <span
-                className={`block w-[18px] h-[2px] bg-[var(--accent)] rounded-full transition-all duration-300 ease-out ${
-                  mobileOpen ? '-rotate-45 -translate-y-[6px]' : ''
+                className={`block rounded-full transition-all duration-500 ease-out origin-center ${
+                  mobileOpen
+                    ? '-rotate-45 -translate-y-[7px] w-[20px] h-[2px]'
+                    : 'rotate-0 translate-y-0 w-[18px] h-[1.5px]'
                 }`}
+                style={{
+                  background:
+                    'linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 100%)',
+                  boxShadow: mobileOpen
+                    ? '0 0 8px rgba(158,255,0,0.4)'
+                    : 'none',
+                }}
               />
             </div>
           </button>
