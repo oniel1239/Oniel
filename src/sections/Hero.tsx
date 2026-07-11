@@ -196,7 +196,8 @@ export default function Hero() {
       
       if (scrollEl) {
         scrollEl.style.opacity = String(1 - progress * 2);
-        scrollEl.style.transform = `translateY(${progress * 30}px)`;
+        // Include translateX(-50%) to preserve horizontal centering from Tailwind
+        scrollEl.style.transform = `translateX(-50%) translateY(${progress * 30}px)`;
       }
     };
     
