@@ -129,7 +129,7 @@ export default function Navigation() {
 
         {/* Slide-in panel */}
         <div
-          className={`absolute top-0 right-0 h-full w-[280px] max-w-[85vw] transition-all duration-400 ease-out ${
+          className={`absolute top-0 right-0 h-full w-[280px] max-w-[85vw] flex flex-col transition-all duration-500 ease-out ${
             mobileOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
           onClick={(e) => e.stopPropagation()}
