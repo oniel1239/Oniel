@@ -52,17 +52,17 @@ export default function Navigation() {
       aria-label="Main Navigation"
       className={`fixed top-0 left-0 w-full z-[1000] transition-all duration-500 ${
         scrolled
-          ? 'bg-[rgba(3,7,18,0.95)] backdrop-blur-xl border-b border-[rgba(158,255,0,0.1)] py-4'
-          : 'bg-transparent py-6'
+          ? 'bg-[rgba(3,7,18,0.95)] backdrop-blur-xl border-b border-[rgba(158,255,0,0.1)] py-3 md:py-4'
+          : 'bg-transparent py-4 md:py-6'
       }`}
     >
-      <div className="flex items-center justify-between px-[5vw] max-w-7xl mx-auto">
+      <div className="flex items-center justify-between px-4 md:px-[5vw] max-w-7xl mx-auto">
         <Magnetic>
           <a
             href="#home"
             onClick={(e) => handleClick(e, '#home')}
             aria-label="Home"
-            className="font-display text-2xl font-bold tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] focus-visible:text-[var(--accent)] transition-colors block"
+            className="font-display text-xl md:text-2xl font-bold tracking-tight text-[var(--text-primary)] hover:text-[var(--accent)] focus-visible:text-[var(--accent)] transition-colors block"
           >
             ONIEL<span className="text-[var(--accent)]">.</span>
           </a>
@@ -86,27 +86,27 @@ export default function Navigation() {
           ))}
         </ul>
 
-        {/* Mobile hamburger */}
+        {/* Mobile hamburger - more visible */}
         <button
-          className="md:hidden relative z-[1001] flex items-center justify-center w-11 h-11 border border-[rgba(158,255,0,0.25)] hover:border-[var(--accent)] bg-[rgba(158,255,0,0.05)] hover:bg-[rgba(158,255,0,0.12)] transition-all duration-300 rounded-sm"
+          className="md:hidden relative z-[1001] flex items-center justify-center w-10 h-10 border border-[rgba(158,255,0,0.4)] hover:border-[var(--accent)] bg-[rgba(158,255,0,0.1)] hover:bg-[rgba(158,255,0,0.2)] active:bg-[rgba(158,255,0,0.3)] transition-all duration-200 rounded"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-expanded={mobileOpen}
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
         >
-          <div className="flex flex-col items-center justify-center gap-[5px]">
+          <div className="flex flex-col items-center justify-center gap-[4px]">
             <span
-              className={`block w-5 h-[2px] bg-[var(--accent)] transition-all duration-300 ease-out ${
-                mobileOpen ? 'rotate-45 translate-y-[7px]' : ''
+              className={`block w-[18px] h-[2px] bg-[var(--accent)] rounded-full transition-all duration-300 ease-out ${
+                mobileOpen ? 'rotate-45 translate-y-[6px]' : ''
               }`}
             />
             <span
-              className={`block w-5 h-[2px] bg-[var(--accent)] transition-all duration-300 ease-out ${
-                mobileOpen ? 'opacity-0 scale-x-0' : ''
+              className={`block w-[18px] h-[2px] bg-[var(--accent)] rounded-full transition-all duration-300 ease-out ${
+                mobileOpen ? 'opacity-0' : ''
               }`}
             />
             <span
-              className={`block w-5 h-[2px] bg-[var(--accent)] transition-all duration-300 ease-out ${
-                mobileOpen ? '-rotate-45 -translate-y-[7px]' : ''
+              className={`block w-[18px] h-[2px] bg-[var(--accent)] rounded-full transition-all duration-300 ease-out ${
+                mobileOpen ? '-rotate-45 -translate-y-[6px]' : ''
               }`}
             />
           </div>
@@ -115,35 +115,35 @@ export default function Navigation() {
 
       {/* Mobile menu backdrop */}
       <div
-        className={`md:hidden fixed inset-0 z-[999] transition-all duration-500 ${
+        className={`md:hidden fixed inset-0 z-[999] transition-all duration-400 ${
           mobileOpen
             ? 'opacity-100 pointer-events-auto'
             : 'opacity-0 pointer-events-none'
         }`}
         style={{
-          background: 'rgba(3,7,18,0.92)',
-          backdropFilter: mobileOpen ? 'blur(24px)' : 'blur(0px)',
-          WebkitBackdropFilter: mobileOpen ? 'blur(24px)' : 'blur(0px)',
+          background: 'rgba(3,7,18,0.95)',
+          backdropFilter: mobileOpen ? 'blur(20px)' : 'blur(0px)',
+          WebkitBackdropFilter: mobileOpen ? 'blur(20px)' : 'blur(0px)',
         }}
         aria-hidden={!mobileOpen}
         onClick={() => setMobileOpen(false)}
       >
-        <div className="flex flex-col items-center justify-center h-full gap-2 px-[5vw]">
+        <div className="flex flex-col items-center justify-center h-full px-6 py-24 overflow-y-auto">
           {navItems.map((item, i) => (
             <a
               key={item.href}
               href={item.href}
               onClick={(e) => handleClick(e, item.href)}
-              className="group relative w-full max-w-xs text-center py-4 overflow-hidden"
+              className="w-full max-w-[240px] text-center py-3 md:py-4 relative group"
               style={{
                 transitionDelay: mobileOpen ? `${i * 80}ms` : '0ms',
               }}
             >
               <span
-                className={`relative z-10 block font-display text-2xl font-bold tracking-wider uppercase transition-all duration-500 ease-out ${
+                className={`relative z-10 block font-display text-xl sm:text-2xl font-bold tracking-wider uppercase transition-all duration-500 ease-out ${
                   mobileOpen
                     ? 'translate-y-0 opacity-100'
-                    : 'translate-y-8 opacity-0'
+                    : 'translate-y-6 opacity-0'
                 }`}
                 style={{
                   transitionDelay: mobileOpen ? `${i * 80 + 100}ms` : '0ms',
@@ -153,10 +153,10 @@ export default function Navigation() {
                 {item.label}
               </span>
 
-              {/* Hover underline accent */}
+              {/* Hover underline */}
               <span
                 className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-[var(--accent)] transition-all duration-500 ease-out ${
-                  mobileOpen ? 'w-0 group-hover:w-3/4' : 'w-0'
+                  mobileOpen ? 'w-0 group-hover:w-full' : 'w-0'
                 }`}
                 style={{
                   transitionDelay: mobileOpen ? `${i * 80 + 200}ms` : '0ms',
@@ -166,10 +166,10 @@ export default function Navigation() {
           ))}
         </div>
 
-        {/* Bottom decorative line */}
+        {/* Bottom accent line */}
         <div
-          className={`absolute bottom-12 left-[5vw] right-[5vw] h-[1px] transition-all duration-700 ease-out ${
-            mobileOpen ? 'opacity-30' : 'opacity-0'
+          className={`absolute bottom-8 left-[10vw] right-[10vw] h-[1px] transition-all duration-700 ease-out ${
+            mobileOpen ? 'opacity-40' : 'opacity-0'
           }`}
           style={{
             background: 'linear-gradient(90deg, transparent, var(--accent), transparent)',
