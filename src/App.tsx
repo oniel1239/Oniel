@@ -4,14 +4,16 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import CustomCursor from './components/CustomCursor';
-import NoiseOverlay from './components/NoiseOverlay';
 import Navigation from './components/Navigation';
+import RobotMascot from './components/RobotMascot';
 
 import Footer from './components/Footer';
 import Hero from './sections/Hero';
+import MarqueeSection from './sections/Marquee';
 import About from './sections/About';
 import Services from './sections/Services';
 import Portfolio from './sections/Portfolio';
+import Stats from './sections/Stats';
 import Contact from './sections/Contact';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,7 +22,6 @@ function App() {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
-    // Initialize Lenis smooth scroll
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -28,7 +29,6 @@ function App() {
     });
     lenisRef.current = lenis;
 
-    // Connect Lenis to GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
     gsap.ticker.add((time) => {
@@ -45,15 +45,18 @@ function App() {
   }, []);
 
   return (
-    <div className="relative overflow-x-hidden">
+    <div className="relative overflow-x-hidden bg-[#06070a]">
+      {/* UI overlays */}
       <CustomCursor />
-      <NoiseOverlay />
       <Navigation />
+      <RobotMascot />
 
       <main>
         <Hero />
+        <MarqueeSection />
         <About />
         <Services />
+        <Stats />
         <Portfolio />
         <Contact />
       </main>

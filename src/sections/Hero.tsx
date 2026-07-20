@@ -1,352 +1,241 @@
-import { useEffect, useRef, useMemo, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Points, PointMaterial, Sphere, MeshDistortMaterial, Sparkles } from '@react-three/drei';
-import * as THREE from 'three';
+﻿import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Environment, Float, Sparkles } from '@react-three/drei';
+import * as THREE from 'three';
+import LiquidMonolith from '@/components/three/LiquidMonolith';
+import StarField from '@/components/three/StarField';
 
-// Particle Field for background depth
-function ParticleField() {
-  const ref = useRef<THREE.Points>(null);
-  const count = 3000;
-  
-  const [positions, colors] = useMemo(() => {
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const color = new THREE.Color();
-    for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
-      
-      const isAccent = Math.random() > 0.8;
-      color.set(isAccent ? '#9eff00' : '#ffffff');
-      colors[i * 3] = color.r;
-      colors[i * 3 + 1] = color.g;
-      colors[i * 3 + 2] = color.b;
-    }
-    return [positions, colors];
-  }, []);
 
-  useFrame((_state, delta) => {
-    if (ref.current) {
-      ref.current.rotation.y -= delta * 0.05;
-      ref.current.rotation.x -= delta * 0.02;
-    }
-  });
 
-  return (
-    <Points ref={ref} positions={positions} colors={colors} stride={3} frustumCulled={false}>
-      <PointMaterial transparent vertexColors size={0.03} sizeAttenuation={true} depthWrite={false} opacity={0.4} />
-    </Points>
-  );
-}
 
-// A highly dynamic, high-tech core element
-function TechCore() {
-  const groupRef = useRef<THREE.Group>(null);
-  const coreRef = useRef<THREE.Mesh>(null);
-  
-  useFrame(({ clock, pointer }) => {
-    const t = clock.getElapsedTime();
-    if (groupRef.current) {
-      // Rotate entire group
-      groupRef.current.rotation.y = t * 0.2;
-      groupRef.current.rotation.x = t * 0.1;
-      
-      // Interactive parallax based on pointer
-      gsap.to(groupRef.current.position, {
-        x: pointer.x * 2,
-        y: pointer.y * 2,
-        duration: 2,
-        ease: "power2.out"
-      });
-      gsap.to(groupRef.current.rotation, {
-        x: pointer.y * 0.5 + t * 0.1,
-        y: pointer.x * 0.5 + t * 0.2,
-        duration: 2,
-        ease: "power2.out"
-      });
-    }
-    
-    if (coreRef.current) {
-      // Pulsing effect
-      const scale = 1 + Math.sin(t * 2) * 0.05;
-      coreRef.current.scale.set(scale, scale, scale);
-    }
-  });
 
-  return (
-    <group ref={groupRef}>
-      <Float speed={2} rotationIntensity={1} floatIntensity={1.5}>
-        {/* Inner Glowing Core */}
-        <Sphere ref={coreRef} args={[1.2, 64, 64]}>
-          <MeshDistortMaterial 
-            color="#030712" 
-            emissive="#9eff00" 
-            emissiveIntensity={0.2}
-            distort={0.4} 
-            speed={2} 
-            roughness={0.2} 
-            metalness={0.8}
-            wireframe={true}
-          />
-        </Sphere>
+/* --- 3D Scene --- */
 
-        {/* Outer Orbiting Rings */}
-        <mesh>
-          <torusGeometry args={[2.5, 0.02, 16, 100]} />
-          <meshBasicMaterial color="#9eff00" transparent opacity={0.3} />
-        </mesh>
-        
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[3, 0.01, 16, 100]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.1} />
-        </mesh>
-
-        <mesh rotation={[0, Math.PI / 4, Math.PI / 4]}>
-          <torusGeometry args={[2, 0.03, 16, 100]} />
-          <meshBasicMaterial color="#00ffcc" transparent opacity={0.2} />
-        </mesh>
-      </Float>
-    </group>
-  );
-}
-
-// 3D Scene setup
 function Scene() {
+  const camRef = useRef<THREE.Group>(null);
+  useFrame((state) => {
+    const t = state.clock.getElapsedTime();
+    if (camRef.current) {
+      camRef.current.rotation.y = state.pointer.x * 0.15;
+      camRef.current.rotation.x = -state.pointer.y * 0.08;
+    }
+    return t;
+  });
   return (
     <>
-      <ambientLight intensity={0.2} />
-      <directionalLight position={[10, 10, 10]} intensity={2} color="#9eff00" />
-      <pointLight position={[-10, -10, -10]} intensity={1} color="#00ffcc" />
-      
-      <TechCore />
-      <ParticleField />
-      <Sparkles count={200} scale={10} size={2} speed={0.4} opacity={0.5} color="#9eff00" />
+      <ambientLight intensity={0.25} />
+      <directionalLight position={[5, 6, 5]} intensity={1.3} color='#ffffff' />
+      <pointLight position={[-6, -4, -6]} intensity={0.7} color='#b6ff3a' />
+      <pointLight position={[6, 2, 4]} intensity={0.4} color='#79f5d4' />
+      <Environment preset='city' />
+      <group ref={camRef}>
+        <LiquidMonolith position={[0, 0, 0]} scale={1.1} />
+      </group>
+      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
+        <mesh position={[-3.5, 1.5, -2]}>
+          <icosahedronGeometry args={[0.3, 0]} />
+          <meshBasicMaterial color='#b6ff3a' wireframe />
+        </mesh>
+      </Float>
+      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.5}>
+        <mesh position={[3.8, -1, -1.5]}>
+          <torusGeometry args={[0.25, 0.05, 8, 32]} />
+          <meshStandardMaterial color='#b6ff3a' emissive='#b6ff3a' emissiveIntensity={0.6} metalness={0.8} roughness={0.2} />
+        </mesh>
+      </Float>
+      <StarField count={1500} radius={30} />
+      <Sparkles count={60} scale={20} size={1.5} speed={0.2} opacity={0.3} color='#79f5d4' />
     </>
   );
 }
 
+/* --- Hero --- */
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const role1Ref = useRef<HTMLSpanElement>(null);
-  const role2Ref = useRef<HTMLSpanElement>(null);
+  const eyebrowRef = useRef<HTMLDivElement>(null);
+  const line1Ref = useRef<HTMLHeadingElement>(null);
+  const line2Ref = useRef<HTMLHeadingElement>(null);
+  const subRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const badgesRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [scrolledPast, setScrolledPast] = useState(false);
 
   useEffect(() => {
-    // Initial reveal animation
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline();
-      
-      tl.fromTo(titleRef.current, 
-        { y: 100, opacity: 0, filter: 'blur(10px)' }, 
-        { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.5, ease: 'power4.out', delay: 0.5 }
-      )
-      .fromTo(subtitleRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-        "-=1"
-      )
-      .fromTo([role1Ref.current, role2Ref.current],
-        { opacity: 0, scale: 0.8 },
-        { opacity: 1, scale: 1, duration: 0.8, stagger: 0.2, ease: 'back.out(1.5)' },
-        "-=0.5"
-      )
-      .fromTo(scrollRef.current,
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-        "-=0.3"
-      );
-      
-      // Glitch effect loop
-      gsap.to(titleRef.current, {
-        textShadow: "0px 0px 20px rgba(158,255,0,0.8)",
-        duration: 2,
-        yoyo: true,
-        repeat: -1,
-        ease: "sine.inOut"
-      });
-    }, containerRef);
-    
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+
+      tl.fromTo(eyebrowRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1 })
+        .fromTo(line1Ref.current, { y: 80, opacity: 0, filter: 'blur(10px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2 }, '-=0.7')
+        .fromTo(line2Ref.current, { y: 80, opacity: 0, filter: 'blur(10px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2 }, '-=1')
+        .fromTo(subRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '-=0.8')
+        .fromTo(ctaRef.current?.children || [], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, '-=0.7')
+        .fromTo(badgesRef.current?.children || [], { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05 }, '-=0.5')
+        .fromTo(scrollRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.3');
+    }, sectionRef);
     return () => ctx.revert();
   }, []);
 
-  // Scroll fade, blur, and direction changes
   useEffect(() => {
-    const textEl = textRef.current;
-    const scrollEl = scrollRef.current;
-    if (!textEl) return;
-
     const onScroll = () => {
-      const scrollY = window.scrollY;
-      const heroHeight = window.innerHeight;
-      const progress = Math.min(scrollY / heroHeight, 1);
-      
-      // Hero text fade/blur
-      textEl.style.opacity = String(1 - progress * 1.5);
-      textEl.style.transform = `translateY(${progress * 150}px)`;
-      textEl.style.filter = `blur(${progress * 15}px)`;
-      
-      // Scroll indicator fade and direction
-      setScrolledPast(scrollY > heroHeight * 0.5);
-      
-      if (scrollEl) {
-        scrollEl.style.opacity = String(1 - progress * 2);
-        // Include translateX(-50%) to preserve horizontal centering from Tailwind
-        scrollEl.style.transform = `translateX(-50%) translateY(${progress * 30}px)`;
+      const y = window.scrollY;
+      const h = window.innerHeight;
+      const p = Math.min(y / h, 1);
+      if (textRef.current) {
+        textRef.current.style.transform = `translateY(${p * 80}px)`;
+        textRef.current.style.opacity = String(1 - p * 1.6);
+        textRef.current.style.filter = `blur(${p * 12}px)`;
       }
     };
-    
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   return (
-    <section id="home" ref={containerRef} className="relative w-full h-screen overflow-hidden bg-primary-dark">
-      {/* 3D Environment Background */}
+    <section
+      id="home"
+      ref={sectionRef}
+      className="relative w-full min-h-[100dvh] overflow-hidden bg-[#06070a]"
+    >
+      {/* 3D Background */}
       <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+        <Canvas
+          camera={{ position: [0, 0, 7], fov: 50 }}
+          dpr={[1, 1.8]}
+          gl={{ antialias: true, alpha: true }}
+        >
           <Scene />
         </Canvas>
       </div>
 
-      {/* Futuristic Overlay Gradients */}
-      <div className="absolute inset-0 z-[5] pointer-events-none bg-gradient-to-b from-transparent via-transparent to-[#030712] opacity-80" />
-      <div className="absolute inset-0 z-[5] pointer-events-none radial-gradient-mask" 
-        style={{ background: 'radial-gradient(circle at center, transparent 0%, #030712 100%)', opacity: 0.7 }} />
+      {/* Vignette + grain mask */}
+      <div
+        className="absolute inset-0 z-[3] pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 60% at 50% 45%, transparent 0%, rgba(6,7,10,0.4) 55%, rgba(6,7,10,0.95) 100%)',
+        }}
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 h-48 z-[3] pointer-events-none"
+        style={{
+          background: 'linear-gradient(180deg, transparent 0%, #06070a 100%)',
+        }}
+      />
 
-      {/* Hero Content */}
+      {/* Content */}
       <div
         ref={textRef}
-        className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none px-4"
+        className="relative z-10 mx-auto max-w-[1400px] px-6 lg:px-[5vw] min-h-[100dvh] flex flex-col justify-center"
       >
-        <div className="relative group" style={{ perspective: '1000px' }}>
-          <h1
-            ref={titleRef}
-            className="font-display font-bold text-transparent bg-clip-text bg-white text-center leading-none tracking-tighter"
-            style={{ 
-              fontSize: 'clamp(4rem, 12vw, 12rem)',
-              WebkitTextStroke: '1px rgba(255,255,255,0.1)',
-            }}
+        <div className="max-w-5xl">
+          {/* Eyebrow */}
+          <div
+            ref={eyebrowRef}
+            className="flex items-center gap-3 mb-7 sm:mb-9"
           >
-            ONIEL<span className="text-accent drop-shadow-[0_0_15px_rgba(158,255,0,0.8)]">.</span>
-          </h1>
-        </div>
-
-        <p ref={subtitleRef} className="mt-6 flex flex-wrap justify-center items-center gap-4 text-sm md:text-base font-body tracking-[0.4em] uppercase text-center text-text-secondary">
-          <span ref={role1Ref} className="px-4 py-1 border border-accent/30 rounded-full bg-accent/5 backdrop-blur-sm text-text-primary shadow-[0_0_15px_rgba(158,255,0,0.1)]">
-            Systems Architect
-          </span>
-          <span className="hidden md:inline text-accent/50">/</span>
-          <span ref={role2Ref} className="px-4 py-1 border border-[#00ffcc]/30 rounded-full bg-[#00ffcc]/5 backdrop-blur-sm text-text-primary shadow-[0_0_15px_rgba(0,255,204,0.1)]">
-            Security &amp; Automation
-          </span>
-        </p>
-        
-        {/* High-tech decorative elements */}
-        <div className="absolute top-[20%] left-[10%] hidden lg:flex flex-col gap-2 opacity-30">
-          <div className="w-12 h-[1px] bg-accent"></div>
-          <div className="text-[10px] font-mono tracking-widest text-accent">SYS.ONL.01</div>
-        </div>
-        
-        <div className="absolute bottom-[25%] right-[10%] hidden lg:flex flex-col items-end gap-2 opacity-30">
-          <div className="text-[10px] font-mono tracking-widest text-accent">STATUS: ONLINE</div>
-          <div className="w-12 h-[1px] bg-accent"></div>
-        </div>
-
-        {/* Scroll indicator — flips direction when scrolled past hero */}
-        <div
-          ref={scrollRef}
-          onClick={() => {
-            const target = scrolledPast ? '#home' : '#about';
-            const el = document.querySelector(target);
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              const target = scrolledPast ? '#home' : '#about';
-              const el = document.querySelector(target);
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }
-          }}
-          role="button"
-          tabIndex={0}
-          className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer pointer-events-auto group"
-        >
-          {/* Pill container */}
-          <div className="flex flex-col items-center gap-2 px-4 py-3 rounded-full border border-[rgba(158,255,0,0.15)] bg-[rgba(3,7,18,0.5)] backdrop-blur-sm transition-all duration-300 group-hover:border-[rgba(158,255,0,0.4)] group-hover:bg-[rgba(158,255,0,0.05)]">
-            {/* Text — changes between Scroll and Top */}
-            <span className="text-[9px] font-mono tracking-[0.25em] uppercase transition-all duration-500"
-              style={{
-                color: scrolledPast
-                  ? 'rgba(0,255,204,0.6)'
-                  : 'rgba(158,255,0,0.5)',
-              }}
-            >
-              {scrolledPast ? 'Top' : 'Scroll'}
+            <div className="w-10 h-[1px] divider-line" />
+            <span className="text-[10px] sm:text-xs font-mono tracking-[0.3em] uppercase text-[rgba(182,255,58,0.7)]">
+              Ethical Hacker &nbsp;·&nbsp; Systems Architect &nbsp;·&nbsp; Karachi
             </span>
-            {/* Animated arrows — flip 180° when scrolled past */}
-            <div className={`flex flex-col items-center -mt-0.5 transition-transform duration-500 ${
-              scrolledPast ? 'rotate-180' : 'rotate-0'
-            }`}>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                className="transition-colors duration-300 animate-bounce"
-                style={{
-                  color: scrolledPast
-                    ? 'rgba(0,255,204,0.4)'
-                    : 'rgba(158,255,0,0.4)',
-                  animationDuration: '2s',
-                }}
-              >
-                <path
-                  d="M7 10L2 5M7 10L12 5"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 14 14"
-                fill="none"
-                className="transition-colors duration-300 -mt-3 animate-bounce"
-                style={{
-                  color: scrolledPast
-                    ? 'rgba(0,255,204,0.4)'
-                    : 'rgba(158,255,0,0.4)',
-                  animationDuration: '2s',
-                  animationDelay: '0.15s',
-                }}
-              >
-                <path
-                  d="M7 10L2 5M7 10L12 5"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
           </div>
-          {/* Glow line — flips gradient direction when scrolled past */}
-          <div className={`w-[2px] h-6 transition-all duration-500 ${
-            scrolledPast
-              ? 'bg-gradient-to-t from-[rgba(0,255,204,0.3)] to-transparent'
-              : 'bg-gradient-to-b from-[rgba(158,255,0,0.3)] to-transparent'
-          }`} />
+
+          {/* Main heading */}
+          <h1 className="font-display font-bold leading-[0.92] tracking-[-0.04em] mb-6 sm:mb-8">
+            <span
+              ref={line1Ref}
+              className="block text-gradient"
+              style={{ fontSize: 'clamp(2.6rem, 8.4vw, 8.4rem)' }}
+            >
+              Securing the
+            </span>
+            <span
+              ref={line2Ref}
+              className="block"
+              style={{ fontSize: 'clamp(2.6rem, 8.4vw, 8.4rem)' }}
+            >
+              <span className="text-gradient">future, </span>
+              <span className="font-serif font-light text-gradient-accent">elegantly.</span>
+            </span>
+          </h1>
+
+          {/* Sub */}
+          <p
+            ref={subRef}
+            className="font-body text-[rgba(220,220,230,0.7)] text-base sm:text-lg md:text-xl max-w-2xl leading-relaxed"
+          >
+            I&apos;m <span className="text-white font-medium">Oniel Robin Samuel</span> — building
+            secure digital ecosystems, automating complex workflows, and shipping
+            premium web experiences with a cinematic touch.
+          </p>
+
+          {/* CTAs */}
+          <div ref={ctaRef} className="mt-10 sm:mt-12 flex flex-wrap items-center gap-4">
+            <a
+              href="#portfolio"
+              onClick={(e) => { e.preventDefault(); document.querySelector('#portfolio')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 text-sm font-display font-medium overflow-hidden rounded-full
+                bg-[#b6ff3a] text-[#06070a] transition-transform duration-300 hover:scale-[1.02]"
+            >
+              <span className="relative z-10">View Selected Work</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">
+                <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </a>
+            <a
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+              className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 text-sm font-display font-medium rounded-full
+                border border-[rgba(255,255,255,0.12)] text-white/90 hover:border-[rgba(182,255,58,0.4)] hover:bg-[rgba(182,255,58,0.04)] transition-all duration-300"
+            >
+              <span>Start a project</span>
+            </a>
+          </div>
+
+          {/* Badges */}
+          <div ref={badgesRef} className="mt-12 sm:mt-16 flex flex-wrap items-center gap-x-8 gap-y-3">
+            {[
+              { k: 'Open for work', v: '' },
+              { k: 'Based in', v: 'Karachi, Pakistan' },
+              { k: 'Status', v: 'Operational' },
+            ].map((b) => (
+              <div key={b.k} className="flex items-center gap-2.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#b6ff3a] animate-pulse" />
+                <span className="text-[10px] sm:text-xs font-mono tracking-wider uppercase text-[rgba(220,220,230,0.55)]">
+                  {b.k} <span className="text-white/80">{b.v}</span>
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        ref={scrollRef}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+      >
+        <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.3em] uppercase text-[rgba(182,255,58,0.5)]">
+          Scroll to explore
+        </span>
+        <div className="relative w-[1px] h-12 bg-[rgba(255,255,255,0.08)] overflow-hidden">
+          <div
+            className="absolute top-0 left-0 w-full h-3 bg-[#b6ff3a]"
+            style={{
+              animation: 'scrollLine 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite',
+            }}
+          />
+        </div>
+        <style>{`
+          @keyframes scrollLine {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(400%); }
+          }
+        `}</style>
       </div>
     </section>
   );
 }
+
+

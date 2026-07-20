@@ -2,51 +2,51 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { asset } from '@/lib/utils';
+import TiltCard from '@/components/fx/TiltCard';
+import RevealText from '@/components/fx/RevealText';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const services = [
   {
     id: '01',
-    title: 'ETHICAL HACKING',
-    subtitle: 'Penetration Testing & Security Assessment',
+    title: 'Ethical Hacking',
+    italic: 'Security, audited.',
     description:
-      'Comprehensive security audits, vulnerability assessments, and penetration testing. I identify weaknesses before malicious actors do — providing detailed remediation strategies and fortifying your digital infrastructure against evolving cyber threats.',
-    features: ['Network Penetration Testing', 'Web App Security Audits', 'Social Engineering Assessments', 'Red Team Operations', 'Security Reporting & Remediation'],
+      'Comprehensive security audits, vulnerability assessments, and penetration testing. I identify weaknesses before malicious actors do � providing detailed remediation strategies.',
+    features: ['Network Penetration Testing', 'Web App Security Audits', 'Social Engineering Assessments', 'Red Team Operations'],
     image: asset('/portfolio-1.jpg'),
-    accent: '#9eff00',
   },
   {
     id: '02',
-    title: 'WORKFLOW AUTOMATION',
-    subtitle: 'Intelligent Process Optimization',
+    title: 'Workflow Automation',
+    italic: 'Bots that ship work.',
     description:
-      'Custom automation pipelines that eliminate repetitive tasks, streamline operations, and boost productivity. From bot development to CI/CD orchestration, I engineer intelligent workflows that let your team focus on what matters most.',
-    features: ['Custom Bot Development', 'CI/CD Pipeline Design', 'Data Processing Automation', 'API Integration & Orchestration', 'Monitoring & Alerting Systems'],
+      'Custom automation pipelines that eliminate repetitive tasks, streamline operations, and boost productivity. From bot development to CI/CD orchestration.',
+    features: ['Custom Bot Development', 'CI/CD Pipeline Design', 'Data Processing Automation', 'API Integration & Orchestration'],
     image: asset('/portfolio-2.jpg'),
-    accent: '#00ffcc',
   },
   {
     id: '03',
-    title: 'WEBSITE DEVELOPMENT',
-    subtitle: 'High-Performance Secure Frontends',
+    title: 'Website Development',
+    italic: 'Fast. Secure. Cinematic.',
     description:
-      'Modern, blazing-fast web applications built with security-first architecture. I specialize in React ecosystems, server-side rendering, and progressive web apps that deliver exceptional user experiences while maintaining ironclad security standards.',
-    features: ['React & Next.js Development', 'Secure Authentication Systems', 'Performance Optimization', 'Responsive & Accessible Design', 'SEO-First Architecture'],
+      'Modern, blazing-fast web applications built with security-first architecture. React ecosystems, server-side rendering, and progressive web apps.',
+    features: ['React & Next.js Development', 'Secure Authentication Systems', 'Performance Optimization', 'Responsive & Accessible Design'],
     image: asset('/portfolio-3.jpg'),
-    accent: '#9eff00',
   },
   {
     id: '04',
-    title: 'APPLICATION DEVELOPMENT',
-    subtitle: 'Scalable Backend Systems & APIs',
+    title: 'App Development',
+    italic: 'Backends that scale.',
     description:
-      'Robust, scalable backend architectures and RESTful/GraphQL APIs. I design database schemas, implement microservices, and build the infrastructure that powers modern applications — all with security, performance, and maintainability at the core.',
-    features: ['API Design & Development', 'Database Architecture', 'Microservices Implementation', 'Cloud Infrastructure Setup', 'Real-time Data Processing'],
+      'Robust, scalable backend architectures and RESTful/GraphQL APIs. Database schemas, microservices, and the infrastructure that powers modern applications.',
+    features: ['API Design & Development', 'Database Architecture', 'Microservices Implementation', 'Cloud Infrastructure Setup'],
     image: asset('/portfolio-4.jpg'),
-    accent: '#00ffcc',
   },
 ];
+
+
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -58,156 +58,107 @@ export default function Services() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      // Header animation
       if (headerRef.current) {
-        gsap.fromTo(
-          headerRef.current.querySelectorAll('.reveal-item'),
-          { y: 50, opacity: 0 },
+        gsap.fromTo(headerRef.current.querySelectorAll('.reveal-item'),
+          { y: 40, opacity: 0 },
           {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: headerRef.current,
-              start: 'top 75%',
-              toggleActions: 'play none none reverse',
-            },
+            y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+            scrollTrigger: { trigger: headerRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
           }
         );
       }
 
-      // Card animations
       cardRefs.current.forEach((card, i) => {
         if (!card) return;
-        const direction = i % 2 === 0 ? -80 : 80;
-
-        gsap.fromTo(
-          card,
+        const direction = i % 2 === 0 ? -60 : 60;
+        gsap.fromTo(card,
           { x: direction, opacity: 0 },
           {
-            x: 0,
-            opacity: 1,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 75%',
-              toggleActions: 'play none none reverse',
-            },
+            x: 0, opacity: 1, duration: 1, ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 80%', toggleActions: 'play none none reverse' },
           }
         );
       });
     }, section);
-
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      id="services"
-      ref={sectionRef}
-      className="relative w-full bg-[var(--bg-primary)] py-[10vh] px-[5vw]"
-    >
+    <section id="services" ref={sectionRef} className="relative w-full bg-[#06070a] py-24 sm:py-32 px-6 lg:px-[5vw]">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div ref={headerRef} className="mb-20">
-          <span className="reveal-item text-[var(--accent)] text-sm tracking-[0.3em] uppercase font-body block">
-            // Capabilities
-          </span>
-          <h2
-            className="reveal-item font-display font-bold text-[var(--text-primary)] mt-2"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
-          >
-            SERVICES
-          </h2>
-          <p className="reveal-item font-body text-[var(--text-secondary)] mt-4 max-w-2xl text-lg">
-            Four pillars of technical expertise. Each service is delivered with
-            military-grade precision and an obsession for quality.
-          </p>
-        </div>
+        <RevealText className="mb-14 sm:mb-20 max-w-4xl">
+          <div ref={headerRef}>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-[1px] divider-line" />
+              <span className="text-[10px] sm:text-xs font-mono tracking-[0.3em] uppercase text-[rgba(182,255,58,0.5)]">
+                // Capabilities
+              </span>
+            </div>
+            <h2 className="font-display font-bold text-white text-3xl sm:text-5xl md:text-7xl tracking-[-0.03em] mb-5">
+              Four pillars of <span className="font-serif font-light italic text-gradient-accent">precision.</span>
+            </h2>
+            <p className="font-body text-[rgba(220,220,230,0.6)] text-base sm:text-lg max-w-2xl">
+              From pentesting to pipelines, every system I touch is engineered with intent.
+            </p>
+          </div>
+        </RevealText>
 
-        {/* Service Cards */}
-        <div className="space-y-32">
-          {services.map((service, i) => (
+        <div className="space-y-16 sm:space-y-20">
+          {services.map((s, i) => (
             <div
-              key={service.id}
-              ref={(el) => {
-                if (el) cardRefs.current[i] = el;
-              }}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                i % 2 === 1 ? 'lg:direction-rtl' : ''
-              }`}
+              key={s.id}
+              ref={(el) => { if (el) cardRefs.current[i] = el; }}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center"
             >
-              {/* Image */}
-              <div className={`relative group ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
-                <div className="relative overflow-hidden border border-[rgba(255,255,255,0.1)]">
-                  <img
-                    src={service.image}
-                    alt={`${service.title} service visualization`}
-                    loading="lazy"
-                    className="w-full aspect-video object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Overlay */}
-                  <div
-                    className="absolute inset-0 opacity-40 transition-opacity duration-500 group-hover:opacity-20"
-                    style={{
-                      background: `linear-gradient(135deg, ${service.accent}33 0%, transparent 60%)`,
-                    }}
-                  />
-                  {/* Number */}
-                  <div
-                    className="absolute top-4 left-4 font-display text-6xl font-bold opacity-30"
-                    style={{ color: service.accent }}
-                  >
-                    {service.id}
+              <div className={`relative ${i % 2 === 1 ? 'lg:order-2' : ''}`}>
+                <TiltCard intensity={10} className="relative group rounded-2xl overflow-hidden">
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                    <img
+                      src={s.image}
+                      alt={s.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    />
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          'linear-gradient(180deg, rgba(6,7,10,0.0) 0%, rgba(6,7,10,0.0) 50%, rgba(6,7,10,0.85) 100%)',
+                      }}
+                    />
+
+                    <div className="absolute top-4 left-4 font-display text-5xl sm:text-6xl font-bold text-white/10">
+                      {s.id}
+                    </div>
+                    <div className="absolute bottom-4 left-4 text-[9px] font-mono tracking-[0.2em] uppercase text-[rgba(182,255,58,0.6)]">
+                      Service / {s.id}
+                    </div>
+                    <div className="absolute inset-0 border border-[rgba(255,255,255,0.05)] group-hover:border-[rgba(182,255,58,0.2)] rounded-2xl transition-colors duration-500" />
                   </div>
-                </div>
-                {/* Glow line */}
-                <div
-                  className="absolute -bottom-1 left-0 h-[2px] w-0 group-hover:w-full transition-all duration-700"
-                  style={{ backgroundColor: service.accent }}
-                />
+                </TiltCard>
               </div>
 
-              {/* Content */}
-              <div className={`space-y-6 ${i % 2 === 1 ? 'lg:order-1' : ''}`}>
-                <div>
-                  <span
-                    className="text-sm font-mono tracking-wider"
-                    style={{ color: service.accent }}
-                  >
-                    {service.id} / 04
+              <div className={`${i % 2 === 1 ? 'lg:order-1' : ''}`}>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-[10px] sm:text-xs font-mono tracking-[0.3em] uppercase text-[rgba(182,255,58,0.6)]">
+                    {s.id} / 04
                   </span>
-                  <h3
-                    className="font-display font-bold text-[var(--text-primary)] mt-2"
-                    style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)' }}
-                  >
-                    {service.title}
-                  </h3>
-                  <p
-                    className="font-body text-sm mt-1 tracking-wide uppercase"
-                    style={{ color: service.accent, opacity: 0.7 }}
-                  >
-                    {service.subtitle}
-                  </p>
+                  <div className="flex-1 h-[1px] bg-[rgba(255,255,255,0.06)]" />
                 </div>
-
-                <p className="font-body text-[var(--text-secondary)] leading-relaxed">
-                  {service.description}
+                <h3 className="font-display font-bold text-white text-3xl sm:text-4xl md:text-5xl tracking-[-0.03em] mb-2">
+                  {s.title}
+                </h3>
+                <p className="font-serif italic text-[#b6ff3a] text-xl sm:text-2xl mb-5">
+                  {s.italic}
                 </p>
-
-                <ul className="space-y-2">
-                  {service.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-3">
-                      <div
-                        className="w-1.5 h-1.5 flex-shrink-0"
-                        style={{ backgroundColor: service.accent }}
-                      />
-                      <span className="text-[var(--text-secondary)] text-sm">
-                        {feature}
-                      </span>
+                <p className="font-body text-[rgba(220,220,230,0.6)] leading-relaxed text-sm sm:text-base mb-6 max-w-xl">
+                  {s.description}
+                </p>
+                <ul className="space-y-2.5">
+                  {s.features.map((f) => (
+                    <li key={f} className="flex items-center gap-3 group">
+                      <span className="w-6 h-[1px] bg-[#b6ff3a]/60 group-hover:w-10 transition-all duration-500" />
+                      <span className="text-[rgba(220,220,230,0.6)] text-sm group-hover:text-white transition-colors duration-300">{f}</span>
                     </li>
                   ))}
                 </ul>
