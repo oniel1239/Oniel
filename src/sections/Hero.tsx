@@ -82,7 +82,7 @@ export default function Hero() {
         .fromTo(line1Ref.current, { y: 80, opacity: 0, filter: 'blur(10px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2 }, '-=0.7')
         .fromTo(line2Ref.current, { y: 80, opacity: 0, filter: 'blur(10px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2 }, '-=1')
         .fromTo(subRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '-=0.8')
-        .fromTo(ctaRef.current?.children || [], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, '-=0.7')
+        .fromTo(ctaRef.current?.children?.length ? [...ctaRef.current.children] : [], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, '-=0.7')
         .fromTo(scrollRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.3');
     }, sectionRef);
     return () => ctx.revert();

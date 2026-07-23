@@ -35,13 +35,16 @@ export default function About() {
         }
       );
 
-      gsap.fromTo(bioRef.current?.querySelectorAll('.reveal-line') || [],
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power3.out',
-          scrollTrigger: { trigger: bioRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
-        }
-      );
+      const revealLines = bioRef.current?.querySelectorAll('.reveal-line');
+      if (revealLines && revealLines.length > 0) {
+        gsap.fromTo(revealLines,
+          { y: 40, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+            scrollTrigger: { trigger: bioRef.current, start: 'top 70%', toggleActions: 'play none none reverse' },
+          }
+        );
+      }
 
       skillRefs.current.forEach((el, i) => {
         if (!el) return;
@@ -83,7 +86,7 @@ export default function About() {
             </span>
           </div>
           <h2 className="font-display font-bold text-white text-3xl sm:text-5xl md:text-7xl tracking-[-0.03em] max-w-4xl">
-            I build systems that <span className="font-serif font-light italic text-gradient-accent">work beautifully</span> — and stay safe.
+            I build systems that <span className="font-serif font-light italic text-gradient-accent">work beautifully</span> ï¿½ and stay safe.
           </h2>
         </RevealText>
 

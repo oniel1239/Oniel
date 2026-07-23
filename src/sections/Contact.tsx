@@ -17,15 +17,19 @@ export default function Contact() {
     const section = sectionRef.current;
     if (!section) return;
     const ctx = gsap.context(() => {
-      gsap.fromTo(headerRef.current?.querySelectorAll('.reveal-item') || [],
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power3.out',
-          scrollTrigger: { trigger: headerRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
-        }
-      );
-      if (formRef.current) {
-        gsap.fromTo(formRef.current.querySelectorAll('.form-field'),
+      const revealItems = headerRef.current?.querySelectorAll('.reveal-item');
+      if (revealItems && revealItems.length > 0) {
+        gsap.fromTo(revealItems,
+          { y: 40, opacity: 0 },
+          {
+            y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power3.out',
+            scrollTrigger: { trigger: headerRef.current, start: 'top 75%', toggleActions: 'play none none reverse' },
+          }
+        );
+      }
+      const formFields = formRef.current?.querySelectorAll('.form-field');
+      if (formFields && formFields.length > 0) {
+        gsap.fromTo(formFields,
           { y: 25, opacity: 0 },
           {
             y: 0, opacity: 1, duration: 0.6, stagger: 0.06, ease: 'power3.out',

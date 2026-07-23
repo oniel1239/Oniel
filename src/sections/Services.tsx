@@ -13,7 +13,7 @@ const services = [
     title: 'Ethical Hacking',
     italic: 'Security, audited.',
     description:
-      'Comprehensive security audits, vulnerability assessments, and penetration testing. I identify weaknesses before malicious actors do — providing detailed remediation strategies.',
+      'Comprehensive security audits, vulnerability assessments, and penetration testing. I identify weaknesses before malicious actors do ï¿½ providing detailed remediation strategies.',
     features: ['Network Penetration Testing', 'Web App Security Audits', 'Social Engineering Assessments', 'Red Team Operations'],
     image: asset('/portfolio-1.jpg'),
   },
@@ -58,8 +58,9 @@ export default function Services() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      if (headerRef.current) {
-        gsap.fromTo(headerRef.current.querySelectorAll('.reveal-item'),
+      const revealItems = headerRef.current?.querySelectorAll('.reveal-item');
+      if (revealItems && revealItems.length > 0) {
+        gsap.fromTo(revealItems,
           { y: 40, opacity: 0 },
           {
             y: 0, opacity: 1, duration: 0.9, stagger: 0.08, ease: 'power3.out',
