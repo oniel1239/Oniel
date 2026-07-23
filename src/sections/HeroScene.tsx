@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useFrame, Canvas } from '@react-three/fiber';
-import { Environment, Float, Sparkles } from '@react-three/drei';
+import { Environment, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import LiquidMonolith from '@/components/three/LiquidMonolith';
 import StarField from '@/components/three/StarField';
@@ -25,18 +25,7 @@ function SceneInner() {
       <group ref={camRef}>
         <LiquidMonolith position={[0, 0, 0]} scale={1.1} />
       </group>
-      <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-        <mesh position={[-3.5, 1.5, -2]}>
-          <icosahedronGeometry args={[0.3, 0]} />
-          <meshBasicMaterial color='#b6ff3a' wireframe />
-        </mesh>
-      </Float>
-      <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.5}>
-        <mesh position={[3.8, -1, -1.5]}>
-          <torusGeometry args={[0.25, 0.05, 8, 32]} />
-          <meshStandardMaterial color='#b6ff3a' emissive='#b6ff3a' emissiveIntensity={0.6} metalness={0.8} roughness={0.2} />
-        </mesh>
-      </Float>
+
       <StarField count={800} radius={30} />
       <Sparkles count={60} scale={20} size={1.5} speed={0.2} opacity={0.3} color='#79f5d4' />
     </>
