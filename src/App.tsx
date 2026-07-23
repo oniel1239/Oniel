@@ -45,7 +45,7 @@ function App() {
   }, []);
 
   return (
-    <div className="relative overflow-x-hidden bg-[#06070a]">
+    <div className="relative overflow-x-hidden bg-[#06070a] page-enter">
       {/* UI overlays */}
       <CustomCursor />
       <Navigation />
