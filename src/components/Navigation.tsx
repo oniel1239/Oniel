@@ -188,7 +188,7 @@ export default function Navigation() {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleClick(e, item.href)}
-                className="group relative block"
+                className="group relative block outline-none focus-visible:outline-none"
               >
                 <span
                   className={`font-display text-2xl font-bold tracking-[0.08em] uppercase transition-all duration-600 ease-out block py-2.5 ${
