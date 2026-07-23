@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CustomCursor from './components/CustomCursor';
 import Navigation from './components/Navigation';
 import RobotMascot from './components/RobotMascot';
+import Loader from './components/fx/Loader';
 
 import Footer from './components/Footer';
 import Hero from './sections/Hero';
@@ -23,9 +24,10 @@ function App() {
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.5,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 2,
+      wheelMultiplier: 1.1,
+      touchMultiplier: 1.5,
     });
     lenisRef.current = lenis;
 
@@ -47,6 +49,7 @@ function App() {
   return (
     <div className="relative overflow-x-hidden bg-[#06070a] page-enter">
       {/* UI overlays */}
+      <Loader />
       <CustomCursor />
       <Navigation />
       <RobotMascot />

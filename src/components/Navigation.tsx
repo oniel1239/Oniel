@@ -191,18 +191,15 @@ export default function Navigation() {
                 className="group relative block outline-none focus-visible:outline-none"
               >
                 <span
-                  className={`font-display text-2xl font-bold tracking-[0.08em] uppercase transition-all duration-600 ease-out block py-2.5 ${
+                  className={`font-display text-2xl font-bold tracking-[0.08em] uppercase transition-all duration-600 ease-out block py-2.5 text-[rgba(255,255,255,0.85)] hover:text-[#9eff00] active:text-[#9eff00] transition-colors duration-300 ${
                     mobileOpen ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
                   }`}
                   style={{
                     transitionDelay: mobileOpen ? `${i * 60 + 100}ms` : '0ms',
-                    color: 'rgba(255,255,255,0.85)',
                   }}
                 >
                   {item.label}
                 </span>
-                {/* Underline on hover */}
-                <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#9eff00] transition-all duration-400 group-hover:w-full opacity-0 group-hover:opacity-60" />
               </a>
             ))}
           </div>

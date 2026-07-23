@@ -30,9 +30,9 @@ export default function RevealText({ children, className = '', delay = 0, y = 40
           y: 0,
           opacity: 1,
           filter: 'blur(0px)',
-          duration: 1.1,
+          duration: 1.3,
           delay,
-          ease: 'power3.out',
+          ease: 'power4.out',
           scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' },
         }
       );
