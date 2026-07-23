@@ -1,118 +1,16 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
-import * as THREE from 'three';
-import gsap from 'gsap';
+import { useState, useCallback, useEffect, useRef } from 'react';
 
 const WHATSAPP_NUMBER = '923473716434';
 const WHATSAPP_MESSAGE = encodeURIComponent('Hey Oniel! I found your website and would like to connect.');
-
-// Mascot color - matching site accent green
-const MASCOT_COLOR = 0x9eff00;
 const MASCOT_GLOW = '#9eff00';
 
-function createFaceScene() {
-  const scene = new THREE.Scene();
-  const face = new THREE.Group();
-
-  const bodyMat = new THREE.MeshStandardMaterial({
-    color: 0x0a0a18,
-    metalness: 0.92,
-    roughness: 0.12,
-  });
-  const accentMat = new THREE.MeshStandardMaterial({
-    color: MASCOT_COLOR,
-    emissive: MASCOT_COLOR,
-    emissiveIntensity: 2.5,
-    metalness: 0.2,
-    roughness: 0.15,
-  });
-  const darkGlass = new THREE.MeshStandardMaterial({
-    color: 0x050510,
-    metalness: 0.85,
-    roughness: 0.05,
-    transparent: true,
-    opacity: 0.9,
-  });
-
-  // Oval head
-  const headGeo = new THREE.CapsuleGeometry(0.45, 0.9, 20, 32);
-  const head = new THREE.Mesh(headGeo, bodyMat.clone());
-  head.rotation.z = Math.PI / 2;
-  head.scale.set(1, 0.75, 0.65);
-  face.add(head);
-
-  // Visor
-  const visorGeo = new THREE.BoxGeometry(1.2, 0.28, 0.08);
-  const visor = new THREE.Mesh(visorGeo, darkGlass);
-  visor.position.set(0, 0.02, 0.35);
-  face.add(visor);
-
-  // Eyes
-  const eyeMat = accentMat.clone();
-  eyeMat.emissiveIntensity = 3;
-
-  const leftEye = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.1, 0.02), eyeMat.clone());
-  leftEye.position.set(-0.22, 0, 0.05);
-  visor.add(leftEye);
-
-  const rightEye = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.1, 0.02), eyeMat.clone());
-  rightEye.position.set(0.22, 0, 0.05);
-  visor.add(rightEye);
-
-  // Pupils
-  const dotMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: MASCOT_COLOR, emissiveIntensity: 4 });
-  const leftDot = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), dotMat);
-  leftDot.position.set(0, 0, 0.02);
-  leftEye.add(leftDot);
-  const rightDot = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 8), dotMat.clone());
-  rightDot.position.set(0, 0, 0.02);
-  rightEye.add(rightDot);
-
-  // Mouth
-  const mouthShape = new THREE.Shape();
-  mouthShape.moveTo(-0.15, 0);
-  mouthShape.quadraticCurveTo(0, -0.06, 0.15, 0);
-  const mouthMat = new THREE.MeshStandardMaterial({ color: MASCOT_COLOR, emissive: MASCOT_COLOR, emissiveIntensity: 1.2, side: THREE.DoubleSide });
-  const mouth = new THREE.Mesh(new THREE.ShapeGeometry(mouthShape), mouthMat);
-  mouth.position.set(0, -0.12, 0.4);
-  face.add(mouth);
-
-  // Antenna
-  const stick = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.015, 0.3, 6), bodyMat.clone());
-  stick.position.set(0, 0.45, 0);
-  face.add(stick);
-
-  const tip = new THREE.Mesh(new THREE.OctahedronGeometry(0.05, 0), accentMat.clone());
-  tip.position.set(0, 0.65, 0);
-  face.add(tip);
-
-  // Ear nubs
-  for (const side of [-1, 1]) {
-    const ear = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.04, 0.12, 8), bodyMat.clone());
-    ear.position.set(side * 0.65, 0.05, 0);
-    ear.rotation.z = side * 0.3;
-    face.add(ear);
-
-    const ringMat = accentMat.clone();
-    ringMat.emissiveIntensity = 1.5;
-    ringMat.opacity = 0.7;
-    ringMat.transparent = true;
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.008, 8, 16), ringMat);
-    ring.position.set(side * 0.65, 0.05, 0.08);
-    face.add(ring);
-  }
-
-  scene.add(face);
-  return { scene, face, visor, leftEye, rightEye, leftDot, rightDot, tip, mouth };
-}
-
 export default function RobotMascot() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const rafRef = useRef<number>(0);
-  const mouseRef = useRef({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [isBeaming, setIsBeaming] = useState(false);
-  const blinkTimerRef = useRef(0);
+  const faceRef = useRef<HTMLDivElement>(null);
+  const pupilsRef = useRef<[SVGCircleElement | null, SVGCircleElement | null]>([null, null]);
+  const [blink, setBlink] = useState(false);
 
   const handleWhatsApp = useCallback(() => {
     setIsBeaming(true);
@@ -122,101 +20,42 @@ export default function RobotMascot() {
     }, 400);
   }, []);
 
+  // Blink periodically
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(130, 100);
-    renderer.setClearColor(0x000000, 0);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.3;
-    container.appendChild(renderer.domElement);
-
-    const camera = new THREE.PerspectiveCamera(32, 130 / 100, 0.1, 100);
-    camera.position.set(0, 0.05, 3.2);
-    camera.lookAt(0, 0, 0);
-
-    const scene = new THREE.Scene();
-    scene.add(new THREE.AmbientLight(0x223344, 0.7));
-
-    const key = new THREE.DirectionalLight(0xffffff, 2);
-    key.position.set(2, 4, 4);
-    scene.add(key);
-
-    const fill = new THREE.DirectionalLight(MASCOT_COLOR, 0.4);
-    fill.position.set(-3, 1, 2);
-    scene.add(fill);
-
-    const rim = new THREE.PointLight(0x00ffcc, 0.6, 6);
-    rim.position.set(0, -1, -2);
-    scene.add(rim);
-
-    const faceData = createFaceScene();
-    scene.add(faceData.scene);
-
-    const onMouse = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    const scheduleBlink = () => {
+      const delay = 2000 + Math.random() * 3500;
+      return setTimeout(() => {
+        setBlink(true);
+        setTimeout(() => setBlink(false), 120);
+        blinkTimer = scheduleBlink();
+      }, delay);
     };
-    window.addEventListener('mousemove', onMouse);
-
-    // Pause animation when the mascot is not visible (IntersectionObserver)
-    let isVisible = true;
-    const observer = new IntersectionObserver(
-      ([entry]) => { isVisible = entry.isIntersecting; },
-      { threshold: 0 }
-    );
-    observer.observe(container);
-
-    let time = 0;
-    const animate = () => {
-      rafRef.current = requestAnimationFrame(animate);
-
-      // Skip rendering when not visible
-      if (!isVisible) return;
-
-      time += 0.016;
-
-      faceData.face.position.y = Math.sin(time * 1.6) * 0.06;
-      faceData.face.rotation.z = Math.sin(time * 1.1) * 0.04;
-
-      faceData.face.rotation.y += (mouseRef.current.x * 0.2 - faceData.face.rotation.y) * 0.05;
-      faceData.face.rotation.x += (-mouseRef.current.y * 0.12 - faceData.face.rotation.x) * 0.05;
-
-      const px = mouseRef.current.x * 0.04;
-      const py = mouseRef.current.y * 0.03;
-      faceData.leftDot.position.x = px;
-      faceData.leftDot.position.y = py;
-      faceData.rightDot.position.x = px;
-      faceData.rightDot.position.y = py;
-
-      faceData.tip.rotation.y = time * 2.5;
-      faceData.tip.rotation.x = Math.sin(time * 3) * 0.3;
-      const ts = 1 + Math.sin(time * 4) * 0.25;
-      faceData.tip.scale.set(ts, ts, ts);
-
-      blinkTimerRef.current += 0.016;
-      if (blinkTimerRef.current > 2 + Math.random() * 3.5) {
-        blinkTimerRef.current = 0;
-        gsap.to(faceData.leftEye.scale, { y: 0.05, duration: 0.04, yoyo: true, repeat: 1, ease: 'power2.inOut' });
-        gsap.to(faceData.rightEye.scale, { y: 0.05, duration: 0.04, yoyo: true, repeat: 1, ease: 'power2.inOut' });
-      }
-
-      renderer.render(scene, camera);
-    };
-    animate();
-
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('mousemove', onMouse);
-      renderer.dispose();
-      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
-    };
+    let blinkTimer = scheduleBlink();
+    return () => clearTimeout(blinkTimer);
   }, []);
 
+  // Eye tracking
+  useEffect(() => {
+    const onMouse = (e: MouseEvent) => {
+      if (!faceRef.current) return;
+      const rect = faceRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / (rect.width / 2);
+      const dy = (e.clientY - cy) / (rect.height / 2);
+      const px = Math.min(4, Math.max(-4, dx * 4));
+      const py = Math.min(3, Math.max(-3, dy * 3));
+      pupilsRef.current.forEach((p) => {
+        if (p) {
+          p.style.transform = `translate(${px}px, ${py}px)`;
+        }
+      });
+    };
+    window.addEventListener('mousemove', onMouse);
+    return () => window.removeEventListener('mousemove', onMouse);
+  }, []);
+
+  // Tooltip auto-show
   useEffect(() => {
     const t1 = setTimeout(() => setShowTooltip(true), 3500);
     const t2 = setTimeout(() => setShowTooltip(false), 9000);
@@ -248,15 +87,17 @@ export default function RobotMascot() {
         </div>
       )}
 
+      {/* Robot face — pure HTML/CSS, no WebGL */}
       <div
-        ref={containerRef}
-        className={`cursor-pointer transition-all duration-500 ease-out ${isHovered ? 'scale-110' : 'scale-100'}`}
+        ref={faceRef}
+        className={`cursor-pointer transition-all duration-500 ease-out select-none ${isHovered ? 'scale-110' : 'scale-100'}`}
         style={{
           width: 'clamp(90px, 11vw, 130px)',
           height: 'clamp(70px, 9vw, 100px)',
           filter: isHovered
             ? 'drop-shadow(0 0 20px rgba(158,255,0,0.45)) drop-shadow(0 0 45px rgba(158,255,0,0.15))'
             : 'drop-shadow(0 0 8px rgba(158,255,0,0.2))',
+          animation: 'robotFloat 3s ease-in-out infinite',
         }}
         onClick={handleWhatsApp}
         onMouseEnter={() => { setIsHovered(true); setShowTooltip(false); }}
@@ -265,9 +106,88 @@ export default function RobotMascot() {
         tabIndex={0}
         aria-label="Open WhatsApp chat with Oniel"
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleWhatsApp(); } }}
-      />
+      >
+        <svg viewBox="0 0 130 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+          {/* Antenna stick */}
+          <line x1="65" y1="8" x2="65" y2="22" stroke="#0a0a18" strokeWidth="2" strokeLinecap="round" />
+
+          {/* Antenna tip */}
+          <g style={{ transformOrigin: '65px 12px', animation: 'antennaSpin 2s linear infinite' }}>
+            <polygon points="65,6 69,14 61,14" fill="#9eff00" />
+            <circle cx="65" cy="14" r="2.5" fill="#9eff00" opacity="0.6"
+              style={{ animation: 'antennaPulse 1s ease-in-out infinite' }} />
+          </g>
+
+          {/* Left ear nub */}
+          <ellipse cx="7" cy="42" rx="5" ry="8" fill="#0a0a18" transform="rotate(-15 7 42)" />
+          <ellipse cx="7" cy="42" rx="2.5" ry="2.5" fill="none" stroke="#9eff00" strokeWidth="0.8" opacity="0.7" />
+
+          {/* Right ear nub */}
+          <ellipse cx="123" cy="42" rx="5" ry="8" fill="#0a0a18" transform="rotate(15 123 42)" />
+          <ellipse cx="123" cy="42" rx="2.5" ry="2.5" fill="none" stroke="#9eff00" strokeWidth="0.8" opacity="0.7" />
+
+          {/* Head */}
+          <ellipse cx="65" cy="48" rx="50" ry="38" fill="#0a0a18" stroke="rgba(158,255,0,0.06)" strokeWidth="0.5" />
+
+          {/* Head highlight */}
+          <ellipse cx="65" cy="48" rx="50" ry="38" fill="url(#headGrad)" opacity="0.3" />
+
+          {/* Visor bar */}
+          <rect x="18" y="36" width="94" height="20" rx="5" fill="#050510" opacity="0.9" stroke="rgba(158,255,0,0.08)" strokeWidth="0.5" />
+
+          {/* Left eye */}
+          <g>
+            <rect x="42" y="40" width="16" height="8" rx="2" fill="#9eff00" opacity="0.9"
+              style={{ animation: blink ? 'robotBlink 0.12s ease' : 'none' }} />
+            {/* Left pupil */}
+            <circle ref={(el) => { pupilsRef.current[0] = el; }} cx="50" cy="44" r="2" fill="white"
+              style={{ transition: 'transform 0.15s ease-out' }} />
+          </g>
+
+          {/* Right eye */}
+          <g>
+            <rect x="72" y="40" width="16" height="8" rx="2" fill="#9eff00" opacity="0.9"
+              style={{ animation: blink ? 'robotBlink 0.12s ease' : 'none' }} />
+            {/* Right pupil */}
+            <circle ref={(el) => { pupilsRef.current[1] = el; }} cx="80" cy="44" r="2" fill="white"
+              style={{ transition: 'transform 0.15s ease-out' }} />
+          </g>
+
+          {/* Mouth */}
+          <path d="M 52 62 Q 65 68 78 62" stroke="#9eff00" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.8" />
+
+          {/* Cheek glows */}
+          <circle cx="38" cy="54" r="6" fill="#9eff00" opacity={isHovered ? 0.08 : 0.04} />
+          <circle cx="92" cy="54" r="6" fill="#9eff00" opacity={isHovered ? 0.08 : 0.04} />
+
+          {/* Gradients */}
+          <defs>
+            <radialGradient id="headGrad" cx="50%" cy="30%" r="60%">
+              <stop offset="0%" stopColor="rgba(255,255,255,0.08)" />
+              <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
 
       <style>{`
+        @keyframes robotFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-4px); }
+        }
+        @keyframes robotBlink {
+          0% { transform: scaleY(1); }
+          50% { transform: scaleY(0.1); }
+          100% { transform: scaleY(1); }
+        }
+        @keyframes antennaSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes antennaPulse {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 1; }
+        }
         @keyframes mascotBeam {
           0% { transform: scale(0.4); opacity: 1; }
           100% { transform: scale(3); opacity: 0; }
