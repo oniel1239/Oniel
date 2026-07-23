@@ -72,7 +72,6 @@ export default function Hero() {
   const line2Ref = useRef<HTMLHeadingElement>(null);
   const subRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const badgesRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,7 +83,6 @@ export default function Hero() {
         .fromTo(line2Ref.current, { y: 80, opacity: 0, filter: 'blur(10px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 1.2 }, '-=1')
         .fromTo(subRef.current, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, '-=0.8')
         .fromTo(ctaRef.current?.children || [], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, '-=0.7')
-        .fromTo(badgesRef.current?.children || [], { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05 }, '-=0.5')
         .fromTo(scrollRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 }, '-=0.3');
     }, sectionRef);
     return () => ctx.revert();
@@ -202,21 +200,7 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Badges */}
-          <div ref={badgesRef} className="mt-12 sm:mt-16 flex flex-wrap items-center gap-x-8 gap-y-3">
-            {[
-              { k: 'Open for work', v: '' },
-              { k: 'Based in', v: 'Karachi, Pakistan' },
-              { k: 'Status', v: 'Operational' },
-            ].map((b) => (
-              <div key={b.k} className="flex items-center gap-2.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#b6ff3a] animate-pulse" />
-                <span className="text-[10px] sm:text-xs font-mono tracking-wider uppercase text-[rgba(220,220,230,0.55)]">
-                  {b.k} <span className="text-white/80">{b.v}</span>
-                </span>
-              </div>
-            ))}
-          </div>
+
         </div>
       </div>
 

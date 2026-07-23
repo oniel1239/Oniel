@@ -103,6 +103,24 @@ export default function Navigation() {
         </div>
       </div>
 
+      {/* ─── Mobile: Top-left logo bar (always visible) ─── */}
+      <nav
+        aria-label="Main Navigation"
+        className="md:hidden fixed top-0 left-0 w-full z-[1000] transition-all duration-700 ease-out"
+        style={{
+          background: 'transparent',
+          opacity: scrolled ? 0 : 1,
+          pointerEvents: scrolled ? 'none' : 'auto',
+        }}
+      >
+        <div className="flex items-center justify-between px-6 max-w-[1400px] mx-auto h-[64px]">
+          <a href="#home" onClick={(e) => handleClick(e, '#home')} aria-label="Home"
+            className="font-display text-lg font-bold tracking-tight text-white block">
+            ONIEL<span className="text-[#9eff00]">.</span>
+          </a>
+        </div>
+      </nav>
+
       {/* ─── Mobile: Floating pill on scroll ─── */}
       <div
         className="md:hidden fixed top-3 left-1/2 -translate-x-1/2 z-[1001] transition-all duration-700 ease-out"
