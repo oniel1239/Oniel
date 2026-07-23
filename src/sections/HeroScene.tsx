@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useCallback } from 'react';
 import { useFrame, Canvas } from '@react-three/fiber';
 import { Environment, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
@@ -33,11 +33,36 @@ function SceneInner() {
 }
 
 export default function HeroScene() {
+  const handleCreated = useCallback((state: { gl: THREE.WebGLRenderer }) => {
+    const canvas = state.gl.domElement;
+
+    // Prevent default context loss from killing the renderer
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      console.warn('WebGL context lost — attempting to restore...');
+    };
+
+    const onContextRestored = () => {
+      console.info('WebGL context restored.');
+    };
+
+    canvas.addEventListener('webglcontextlost', onContextLost);
+    canvas.addEventListener('webglcontextrestored', onContextRestored);
+
+    // (Listeners are cleaned up automatically when the canvas DOM node is removed)
+  }, []);
+
   return (
     <Canvas
       camera={{ position: [0, 0, 7], fov: 50 }}
-      dpr={[1, 1.8]}
-      gl={{ antialias: true, alpha: true }}
+      dpr={[1, 1.5]}
+      gl={{
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance',
+        failIfMajorPerformanceCaveat: false,
+      }}
+      onCreated={handleCreated}
     >
       <SceneInner />
     </Canvas>
