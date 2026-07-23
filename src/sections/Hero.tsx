@@ -178,22 +178,22 @@ export default function Hero() {
           </p>
 
           {/* CTAs */}
-          <div ref={ctaRef} className="mt-10 sm:mt-12 flex flex-wrap items-center gap-4">
+          <div ref={ctaRef} className="mt-8 sm:mt-12 flex flex-wrap items-center gap-3 sm:gap-4">
             <a
               href="#portfolio"
               onClick={(e) => { e.preventDefault(); document.querySelector('#portfolio')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 text-sm font-display font-medium overflow-hidden rounded-full
+              className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-2.5 sm:py-4 text-xs sm:text-sm font-display font-medium overflow-hidden rounded-full
                 bg-[#b6ff3a] text-[#06070a] transition-transform duration-300 hover:scale-[1.02]"
             >
               <span className="relative z-10">View Selected Work</span>
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" className="relative z-10 transition-transform duration-300 group-hover:translate-x-1 sm:w-[14px] sm:h-[14px]">
                 <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </a>
             <a
               href="#contact"
               onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}
-              className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 text-sm font-display font-medium rounded-full
+              className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-2.5 sm:py-4 text-xs sm:text-sm font-display font-medium rounded-full
                 border border-[rgba(255,255,255,0.12)] text-white/90 hover:border-[rgba(182,255,58,0.4)] hover:bg-[rgba(182,255,58,0.04)] transition-all duration-300"
             >
               <span>Start a project</span>
@@ -207,7 +207,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <div
         ref={scrollRef}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1 sm:gap-2"
       >
         <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.3em] uppercase text-[rgba(182,255,58,0.5)]">
           Scroll to explore
