@@ -67,7 +67,7 @@ export default function Contact() {
               Let&apos;s build something <span className="font-serif font-light italic text-gradient-accent">remarkable.</span>
             </h2>
             <p className="font-body text-[rgba(220,220,230,0.6)] text-base sm:text-lg max-w-2xl">
-              Ready to secure your systems or automate your workflows? Drop a line — I usually respond within 24 hours.
+              Ready to secure your systems or automate your workflows? Drop a line ï¿½ I usually respond within 24 hours.
             </p>
           </div>
         </RevealText>
@@ -139,6 +139,7 @@ export default function Contact() {
                     name={field.id}
                     type={field.type}
                     required
+                    autoComplete={field.id === 'email' ? 'email' : 'name'}
                     className="w-full bg-transparent border-0 border-b border-[rgba(255,255,255,0.1)] text-white py-2.5 px-0 text-sm sm:text-base focus:outline-none focus:border-[#b6ff3a] transition-colors placeholder:text-[rgba(255,255,255,0.15)]"
                     placeholder={field.placeholder}
                   />
@@ -152,6 +153,7 @@ export default function Contact() {
                 id="service"
                 name="service"
                 required
+                autoComplete="off"
                 className="w-full bg-transparent border-0 border-b border-[rgba(255,255,255,0.1)] text-white py-2.5 px-0 text-sm sm:text-base focus:outline-none focus:border-[#b6ff3a] transition-colors appearance-none"
               >
                 <option value="" className="bg-[#06070a]">Select a service</option>
@@ -169,6 +171,7 @@ export default function Contact() {
                 name="message"
                 required
                 rows={4}
+                autoComplete="off"
                 className="w-full bg-transparent border-0 border-b border-[rgba(255,255,255,0.1)] text-white py-2.5 px-0 text-sm sm:text-base focus:outline-none focus:border-[#b6ff3a] transition-colors resize-none placeholder:text-[rgba(255,255,255,0.15)]"
                 placeholder="Describe your project..."
               />
