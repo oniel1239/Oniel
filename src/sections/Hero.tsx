@@ -7,7 +7,59 @@ const HeroScene = lazy(() => import('./HeroScene'));
 
 function SceneFallback() {
   return (
-    <div className="absolute inset-0 z-0 bg-[#06070a]" />
+    <div className="absolute inset-0 z-0 bg-[#06070a] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-6">
+        {/* Animated geometric rings */}
+        <div className="relative w-20 h-20">
+          <div
+            className="absolute inset-0 rounded-full border border-[rgba(182,255,58,0.15)]"
+            style={{
+              animation: 'sf-expand 2s ease-out infinite',
+            }}
+          />
+          <div
+            className="absolute inset-2 rounded-full border border-[rgba(121,245,212,0.2)]"
+            style={{
+              animation: 'sf-expand 2s ease-out 0.4s infinite',
+            }}
+          />
+          <div
+            className="absolute inset-4 rounded-full border border-[rgba(182,255,58,0.3)]"
+            style={{
+              animation: 'sf-expand 2s ease-out 0.8s infinite',
+            }}
+          />
+          {/* Center dot */}
+          <div className="absolute inset-[38%] rounded-full bg-[#b6ff3a] opacity-60"
+            style={{
+              animation: 'sf-pulse 2s ease-in-out infinite',
+            }}
+          />
+        </div>
+        {/* Loading text */}
+        <div className="text-[10px] font-mono tracking-[0.4em] uppercase text-[rgba(182,255,58,0.4)]">
+          Loading<span className="sf-dot">.</span><span className="sf-dot">.</span><span className="sf-dot">.</span>
+        </div>
+      </div>
+      <style>{`
+        @keyframes sf-expand {
+          0% { transform: scale(0.3); opacity: 0; }
+          50% { opacity: 1; }
+          100% { transform: scale(1.8); opacity: 0; }
+        }
+        @keyframes sf-pulse {
+          0%, 100% { transform: scale(1); opacity: 0.6; }
+          50% { transform: scale(1.6); opacity: 1; }
+        }
+        .sf-dot:nth-child(1) { animation: sf-blink 1.4s infinite; }
+        .sf-dot:nth-child(2) { animation: sf-blink 1.4s 0.2s infinite; }
+        .sf-dot:nth-child(3) { animation: sf-blink 1.4s 0.4s infinite; }
+        @keyframes sf-blink {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 1; }
+        }
+      `}</style>
+    </div>
   );
 }
 
