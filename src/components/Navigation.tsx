@@ -33,6 +33,8 @@ export default function Navigation() {
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileOpen(false);
+    // Blur the clicked element to remove the green focus-visible outline
+    e.currentTarget.blur();
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
   };
 
