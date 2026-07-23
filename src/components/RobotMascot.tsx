@@ -22,16 +22,24 @@ export default function RobotMascot() {
 
   // Blink periodically
   useEffect(() => {
+    let blinkTimer: ReturnType<typeof setTimeout>;
+    let unblinkTimer: ReturnType<typeof setTimeout>;
+
     const scheduleBlink = () => {
       const delay = 2000 + Math.random() * 3500;
       return setTimeout(() => {
         setBlink(true);
-        setTimeout(() => setBlink(false), 120);
+        unblinkTimer = setTimeout(() => setBlink(false), 120);
         blinkTimer = scheduleBlink();
       }, delay);
     };
-    let blinkTimer = scheduleBlink();
-    return () => clearTimeout(blinkTimer);
+
+    blinkTimer = scheduleBlink();
+
+    return () => {
+      clearTimeout(blinkTimer);
+      clearTimeout(unblinkTimer);
+    };
   }, []);
 
   // Eye tracking
@@ -101,7 +109,7 @@ export default function RobotMascot() {
         }}
         onClick={handleWhatsApp}
         onMouseEnter={() => { setIsHovered(true); setShowTooltip(false); }}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseLeave={() => { setIsHovered(false); }}
         role="button"
         tabIndex={0}
         aria-label="Open WhatsApp chat with Oniel"
@@ -132,33 +140,85 @@ export default function RobotMascot() {
           {/* Head highlight */}
           <ellipse cx="65" cy="48" rx="50" ry="38" fill="url(#headGrad)" opacity="0.3" />
 
+          {/* Subtle jawline */}
+          <path d="M 22 55 Q 65 78 108 55" stroke="rgba(158,255,0,0.04)" strokeWidth="0.5" fill="none" />
+
           {/* Visor bar */}
           <rect x="18" y="36" width="94" height="20" rx="5" fill="#050510" opacity="0.9" stroke="rgba(158,255,0,0.08)" strokeWidth="0.5" />
 
+          {/* Left eyebrow - animates on hover */}
+          <path
+            ref={(el) => { eyebrowsRef.current[0] = el; }}
+            d={isHovered ? "M 38 32 Q 50 25 60 32" : "M 38 35 Q 50 32 60 35"}
+            stroke="#9eff00"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            opacity={isHovered ? 0.6 : 0.3}
+            style={{ transition: 'all 0.3s ease-out' }}
+          />
+
+          {/* Right eyebrow - animates on hover */}
+          <path
+            ref={(el) => { eyebrowsRef.current[1] = el; }}
+            d={isHovered ? "M 70 32 Q 80 25 92 32" : "M 70 35 Q 80 32 92 35"}
+            stroke="#9eff00"
+            strokeWidth="1.2"
+            strokeLinecap="round"
+            opacity={isHovered ? 0.6 : 0.3}
+            style={{ transition: 'all 0.3s ease-out' }}
+          />
+
+          {/* Eye glow (behind eyes) */}
+          <ellipse cx="50" cy="44" rx="12" ry="7" fill="#9eff00" opacity={isHovered ? 0.15 : 0.08}
+            style={{ transition: 'opacity 0.3s ease-out' }} />
+          <ellipse cx="80" cy="44" rx="12" ry="7" fill="#9eff00" opacity={isHovered ? 0.15 : 0.08}
+            style={{ transition: 'opacity 0.3s ease-out' }} />
+
           {/* Left eye */}
           <g>
-            <rect x="42" y="40" width="16" height="8" rx="2" fill="#9eff00" opacity="0.9"
-              style={{ animation: blink ? 'robotBlink 0.12s ease' : 'none' }} />
+            <rect x="42" y="40" width="16" height="8" rx="2.5" fill="#9eff00" opacity="0.95"
+              style={{ animation: blink ? 'robotBlink 0.12s ease' : 'none', transition: 'opacity 0.3s ease-out' }} />
             {/* Left pupil */}
-            <circle ref={(el) => { pupilsRef.current[0] = el; }} cx="50" cy="44" r="2" fill="white"
+            <circle ref={(el) => { pupilsRef.current[0] = el; }} cx="50" cy="44" r="2.5" fill="white"
               style={{ transition: 'transform 0.15s ease-out' }} />
           </g>
 
           {/* Right eye */}
           <g>
-            <rect x="72" y="40" width="16" height="8" rx="2" fill="#9eff00" opacity="0.9"
-              style={{ animation: blink ? 'robotBlink 0.12s ease' : 'none' }} />
+            <rect x="72" y="40" width="16" height="8" rx="2.5" fill="#9eff00" opacity="0.95"
+              style={{ animation: blink ? 'robotBlink 0.12s ease' : 'none', transition: 'opacity 0.3s ease-out' }} />
             {/* Right pupil */}
-            <circle ref={(el) => { pupilsRef.current[1] = el; }} cx="80" cy="44" r="2" fill="white"
+            <circle ref={(el) => { pupilsRef.current[1] = el; }} cx="80" cy="44" r="2.5" fill="white"
               style={{ transition: 'transform 0.15s ease-out' }} />
           </g>
 
-          {/* Mouth */}
-          <path d="M 52 62 Q 65 68 78 62" stroke="#9eff00" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.8" />
+          {/* Mouth - changes shape on hover */}
+          <path
+            ref={mouthRef}
+            d={isHovered
+              ? "M 48 62 Q 65 72 82 62"
+              : "M 52 62 Q 65 66 78 62"}
+            stroke="#9eff00"
+            strokeWidth="1.4"
+            fill="none"
+            strokeLinecap="round"
+            opacity={isHovered ? 0.9 : 0.6}
+            style={{ transition: 'all 0.3s ease-out' }}
+          />
 
-          {/* Cheek glows */}
-          <circle cx="38" cy="54" r="6" fill="#9eff00" opacity={isHovered ? 0.08 : 0.04} />
-          <circle cx="92" cy="54" r="6" fill="#9eff00" opacity={isHovered ? 0.08 : 0.04} />
+          {/* Mouth corners on hover */}
+          {isHovered && (
+            <>
+              <circle cx="48" cy="62" r="1" fill="#9eff00" opacity="0.6" />
+              <circle cx="82" cy="62" r="1" fill="#9eff00" opacity="0.6" />
+            </>
+          )}
+
+          {/* Cheek glows - brighter on hover */}
+          <circle cx="36" cy="52" r="7" fill="#9eff00" opacity={isHovered ? 0.1 : 0.04}
+            style={{ transition: 'opacity 0.3s ease-out' }} />
+          <circle cx="94" cy="52" r="7" fill="#9eff00" opacity={isHovered ? 0.1 : 0.04}
+            style={{ transition: 'opacity 0.3s ease-out' }} />
 
           {/* Gradients */}
           <defs>
