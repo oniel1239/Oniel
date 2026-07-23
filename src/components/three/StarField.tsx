@@ -7,7 +7,7 @@ interface StarFieldProps {
   radius?: number;
 }
 
-export default function StarField({ count = 2500, radius = 50 }: StarFieldProps) {
+export default function StarField({ count = 800, radius = 30 }: StarFieldProps) {
   const ref = useRef<THREE.Points>(null);
 
   const { positions, colors } = useMemo(() => {

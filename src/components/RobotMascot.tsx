@@ -162,10 +162,22 @@ export default function RobotMascot() {
     };
     window.addEventListener('mousemove', onMouse);
 
+    // Pause animation when the mascot is not visible (IntersectionObserver)
+    let isVisible = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => { isVisible = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    observer.observe(container);
+
     let time = 0;
     const animate = () => {
-      time += 0.016;
       rafRef.current = requestAnimationFrame(animate);
+
+      // Skip rendering when not visible
+      if (!isVisible) return;
+
+      time += 0.016;
 
       faceData.face.position.y = Math.sin(time * 1.6) * 0.06;
       faceData.face.rotation.z = Math.sin(time * 1.1) * 0.04;
@@ -197,6 +209,7 @@ export default function RobotMascot() {
     animate();
 
     return () => {
+      observer.disconnect();
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('mousemove', onMouse);
       renderer.dispose();
