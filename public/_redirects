@@ -1,0 +1,7 @@
+# Cloudflare Pages SPA fallback
+# All routes fall through to index.html so React Router can handle them
+/*    /index.html   200
+
+# Optional: Redirect workers.dev subdomain → custom domain once domain is active
+# (Uncomment and replace onielrobin.com with your actual domain)
+# https://oniel.oliverkcw199.workers.dev/*    https://onielrobin.com/:splat    301

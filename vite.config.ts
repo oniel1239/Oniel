@@ -1,10 +1,18 @@
 import path from "path"
 import react from "@vitejs/plugin-react"
-import { defineConfig } from "vite"
+import { defineConfig, loadEnv } from "vite"
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: '/Oniel/',
+export default defineConfig(({ mode }) => {
+  // Load env files (.env, .env.cloudflare, etc.) — VITE_ prefix limits to our vars
+  const env = loadEnv(mode, process.cwd(), 'VITE_')
+
+  // Use env variable for base path: '/Oniel/' for GitHub Pages, '/' for Cloudflare/root-domain
+  // Checks: OS env vars first (Cloudflare Dashboard), then .env files (local --mode cloudflare), then fallback
+  const basePath = process.env.VITE_BASE_PATH || env.VITE_BASE_PATH || '/Oniel/'
+
+  return {
+    base: basePath,
   plugins: [react()],
   server: {
     port: 3000,
@@ -37,4 +45,5 @@ export default defineConfig({
     // Reduce chunk size warnings threshold
     chunkSizeWarningLimit: 400,
   },
+  };
 });

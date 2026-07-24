@@ -1,0 +1,47 @@
+# Cloudflare Pages configuration for oniel.oliverkcw199.workers.dev
+# This file documents the build settings. Actual deployment is automated
+# via the Cloudflare Pages dashboard connected to your GitHub repo.
+#
+# To set up:
+#   1. Go to Cloudflare Dashboard → Workers & Pages → Create → Pages → Connect to Git
+#   2. Select your GitHub repository (oniel1239/Oniel)
+#   3. Use the build settings below
+#   4. Add the environment variables in the dashboard under Settings → Environment variables
+
+name = "oniel"
+
+# ── Custom Domain ─────────────────────────────────────────────────────
+# To add a custom domain (e.g., onielrobin.com):
+#   1. Cloudflare Dashboard → Workers & Pages → your project → Custom domains
+#   2. Click "Set up a custom domain" and enter your domain
+#   3. If the domain is not yet on Cloudflare, update your nameservers at your registrar
+#   4. Cloudflare will automatically create DNS records and provision an SSL cert
+#
+# For apex domains (onielrobin.com) → Cloudflare uses CNAME Flattening automatically
+# For subdomains (www.onielrobin.com) → standard CNAME record
+
+# ── Build Configuration ──────────────────────────────────────────────
+compatibility_date = "2025-12-01"
+pages_build_output_dir = "dist"
+
+[vars]
+# Required: Override the default /Oniel/ base path for root-domain deployment
+VITE_BASE_PATH = "/"
+VITE_ROUTER_BASENAME = "/"
+
+# ── Build command (default — runs on every git push) ──────────────────
+# [build]
+# command = "npm run build"
+
+# ── Routes (optional – for advanced redirects/headers) ─────────────────
+# [[redirects]]
+# from = "/old-path"
+# to = "/new-path"
+# status = 301
+
+# ── Headers (optional – for custom security/CORS headers) ─────────────
+# [[headers]]
+# for = "/*"
+# [headers.values]
+# X-Frame-Options = "DENY"
+# X-Content-Type-Options = "nosniff"

@@ -1,0 +1,7 @@
+# Cloudflare Pages security headers
+# For a full list: https://developers.cloudflare.com/pages/configuration/headers/
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+
+# Note: Redirects belong in _redirects, not _headers

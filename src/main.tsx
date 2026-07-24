@@ -6,7 +6,8 @@ import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename="/Oniel">
+    <BrowserRouter basename={import.meta.env.VITE_ROUTER_BASENAME || '/Oniel'}>
+    
       <App />
     </BrowserRouter>
   </StrictMode>,
