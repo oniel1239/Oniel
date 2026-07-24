@@ -85,6 +85,20 @@
     outline: 1.5px solid var(--accent);
     outline-offset: 2px;
   }
+
+  /* Touch / mobile improvements: remove tap highlight and avoid touch focusing outlines */
+  a, button, input, textarea, label {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
+  /* On coarse-pointer devices (touch), avoid showing the keyboard-oriented focus outline
+     because it often appears as a thin green line on taps; keyboard users still get outlines */
+  @media (pointer: coarse) {
+    *:focus { outline: none; }
+    *:focus-visible { outline: none; }
+  }
 }
 
 @layer components {
@@ -181,6 +195,11 @@
 }
 .glow-card-hover:hover::before {
   opacity: 1;
+}
+
+/* Hint to the browser to optimize nav transforms/opacity for smoother transitions */
+.nav-smooth {
+  will-change: transform, opacity;
 }
 .hero-mask {
   -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 80%);

@@ -43,7 +43,7 @@ export default function Navigation() {
       {/* ─── Desktop: Transparent top bar (hides on scroll) ─── */}
       <nav
         aria-label="Main Navigation"
-        className="hidden md:block fixed top-0 left-0 w-full z-[1000] transition-all duration-700 ease-out"
+        className="hidden md:block fixed top-0 left-0 w-full z-[1000] transition-all duration-700 ease-out nav-smooth"
         style={{
           background: 'transparent',
           opacity: scrolled ? 0 : 1,
@@ -75,7 +75,7 @@ export default function Navigation() {
 
       {/* ─── Desktop: Floating pill on scroll ─── */}
       <div
-        className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-[1001] items-center transition-all duration-700 ease-out"
+        className="hidden md:flex fixed top-4 left-1/2 -translate-x-1/2 z-[1001] items-center transition-all duration-700 ease-out nav-smooth"
         style={{
           opacity: scrolled ? 1 : 0,
           transform: `translateX(-50%) translateY(${scrolled ? '0' : '-10px'})`,
@@ -108,7 +108,7 @@ export default function Navigation() {
       {/* ─── Mobile: Top-left logo bar (always visible) ─── */}
       <nav
         aria-label="Main Navigation"
-        className="md:hidden fixed top-0 left-0 w-full z-[1000] transition-all duration-700 ease-out"
+        className="md:hidden fixed top-0 left-0 w-full z-[1000] transition-all duration-700 ease-out nav-smooth"
         style={{
           background: 'transparent',
           opacity: scrolled ? 0 : 1,
@@ -125,7 +125,7 @@ export default function Navigation() {
 
       {/* ─── Mobile: Floating pill on scroll ─── */}
       <div
-        className="md:hidden fixed top-3 left-1/2 -translate-x-1/2 z-[1001] transition-all duration-700 ease-out"
+        className="md:hidden fixed top-3 left-1/2 -translate-x-1/2 z-[1001] transition-all duration-700 ease-out nav-smooth"
         style={{
           opacity: scrolled ? 1 : 0,
           transform: `translateX(-50%) translateY(${scrolled ? '0' : '-8px'})`,
