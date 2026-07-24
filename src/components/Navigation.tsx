@@ -201,8 +201,8 @@ export default function Navigation() {
                 >
                   {item.label}
                 </span>
-                {/* Underline on hover */}
-                <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#9eff00] transition-all duration-400 group-hover:w-full opacity-0 group-hover:opacity-60" />
+                {/* Underline on hover (only on hover-capable devices) */}
+                <span className="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-[#9eff00] transition-all duration-400 opacity-0 md:group-hover:w-full md:group-hover:opacity-60" />
               </a>
             ))}
           </div>
